@@ -1,0 +1,40 @@
+{
+  "name": "mindmap-vue",
+  "version": "0.0.1",
+  "description": "a mindmap based on vue.js",
+  "main": "index.js",
+  "scripts": {
+    "dev": "run-p dev-client dev-server",
+    "dev-client": "webpack --watch",
+    "dev-server": "webpack --config webpack.config.server.js --watch",
+    "start": "node server/dist/index.js"
+  },
+  "author": "Morse Guo",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.2.0",
+    "koa-static": "^3.0.0",
+    "vue": "^2.3.3",
+    "vue-class-component": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.39",
+    "@types/koa-static": "^2.0.22",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "css-loader": "^0.28.1",
+    "npm-run-all": "^4.0.2",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.3.2",
+    "vue-loader": "^12.1.0",
+    "vue-template-compiler": "^2.2.1",
+    "webpack": "^2.5.1",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  }
+}
