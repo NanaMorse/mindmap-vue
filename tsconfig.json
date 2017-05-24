@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./public/dist/",
     "sourceMap": true,
-    "strict": true,
     "noImplicitReturns": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
-    "target": "es5"
+    "target": "es5",
+    "paths": {
+      "src/*": ["./client-src"]
+    }
   },
   "exclude": [
     "node_modules"

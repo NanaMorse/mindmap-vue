@@ -47,6 +47,10 @@ module.exports = {
 
   resolve: {
     extensions: ['.ts', '.js', '.vue'],
+
+    alias: {
+      src: path.join(__dirname, '/client-src'),
+    }
   },
 
   devtool: '#source-map'

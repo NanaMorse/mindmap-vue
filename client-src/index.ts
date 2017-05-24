@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import HelloComponent from './components/core/Hello.vue'
+import Topic from './components/core/Topic.vue'
 
 new Vue({
   el: '#app',
 
   render(h) {
-    return h(HelloComponent)
+    return h(Topic)
   }
 });
