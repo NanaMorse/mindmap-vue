@@ -13,6 +13,8 @@ export interface originTopicInfo {
   title?: string
 
   style?: topicStyle
+
+  children?: Array<originTopicInfo>
 }
 
 export interface extendedTopicInfo extends originTopicInfo {
@@ -22,4 +24,15 @@ export interface extendedTopicInfo extends originTopicInfo {
     width: number
     height: number
   }
+
+  children?: Array<extendedTopicInfo>
+}
+
+export interface stageInfo {
+  backgroundColor: string
+}
+
+export interface mapInfo {
+  topicTree: {}
+  selectionList: Array<string>
 }
