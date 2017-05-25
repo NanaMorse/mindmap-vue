@@ -49,7 +49,7 @@ module.exports = {
     extensions: ['.ts', '.js', '.vue'],
 
     alias: {
-      src: path.join(__dirname, '/client-src'),
+      'client-src': path.join(__dirname, '/client-src'),
     }
   },
 

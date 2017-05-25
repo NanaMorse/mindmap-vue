@@ -20,6 +20,10 @@ export interface originTopicInfo {
 export interface extendedTopicInfo extends originTopicInfo {
   type: string
 
+  parentId: string
+
+  index: number
+
   size: {
     width: number
     height: number
@@ -33,6 +37,6 @@ export interface stageInfo {
 }
 
 export interface mapInfo {
-  topicTree: {}
+  topicTree: originTopicInfo
   selectionList: Array<string>
 }

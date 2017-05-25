@@ -7,7 +7,7 @@
 <script lang="ts">
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
-  import { TopicShapeType, TopicType } from '../../constants/common'
+  import { TopicShapeType, TopicType } from 'client-src/constants/common'
   import { extendedTopicInfo } from 'client-src/interface'
 
   // todo

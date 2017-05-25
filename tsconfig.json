@@ -3,15 +3,14 @@
     "baseUrl": ".",
     "outDir": "./public/dist/",
     "sourceMap": true,
-    "noImplicitReturns": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
-    "target": "es5",
+    "target": "es6",
     "paths": {
-      "src/*": ["./client-src"]
+      "client-src/*": ["./client-src"]
     }
   },
   "exclude": [

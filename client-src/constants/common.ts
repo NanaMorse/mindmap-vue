@@ -21,3 +21,11 @@ export const TopicShapeType = {
   // 菱形
   PARALLELOGRAM: 'PARALLELOGRAM'
 };
+
+/**
+ * @description 布局类型
+ * */
+export const LayoutType = {
+  // 向右逻辑图
+  LOGIC_TO_RIGHT: 'LOGIC_TO_RIGHT'
+};
