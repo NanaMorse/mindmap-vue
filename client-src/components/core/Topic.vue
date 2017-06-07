@@ -16,10 +16,8 @@
     title: 'Hello!',
     style: {
       shapeType: TopicShapeType.RECT,
-
       borderWidth: 2,
       borderColor: 'red',
-
     },
 
     type: TopicType.ROOT,
@@ -32,13 +30,10 @@
 
   @Component
   class Topic extends Vue {
-    @Prop({ 'default': () => testTopicInfo })
-    private topicInfo: extendedTopicInfo;
+    @Prop()
+    topicInfo: extendedTopicInfo;
 
-    constructor() {
-      super();
-    }
-
+    /** @Computed */
     get sizeStyle() {
       const { size } = this.topicInfo;
 
@@ -48,16 +43,13 @@
       }
     }
 
+    /** @Computed */
     get borderStyle() {
       const { style } = this.topicInfo;
 
       return {
         border: `${style.borderWidth}px solid ${style.borderColor}`
       }
-    }
-
-    mounted() {
-
     }
   }
 
