@@ -1,3 +1,5 @@
+import { defaultTitle } from './i18n'
+
 /**
  * @description Topic类型 / Topic Type
  * */
@@ -28,4 +30,13 @@ export const TopicShapeType = {
 export const LayoutType = {
   // 向右逻辑图
   LOGIC_TO_RIGHT: 'LOGIC_TO_RIGHT'
+};
+
+/**
+ * @description topic类型与该类型默认title key名的对应map
+ * */
+export const TopicTypeToDefaultTitleKeyMap = {
+  [TopicType.ROOT]: defaultTitle.rootTopic,
+  [TopicType.MAIN]: defaultTitle.mainTopic,
+  [TopicType.SUB]: defaultTitle.subTopic
 };

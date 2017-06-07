@@ -35,11 +35,11 @@
 
     /** @Computed */
     get sizeStyle() {
-      const { size } = this.topicInfo;
+      const { shapeSize } = this.topicInfo;
 
       return {
-        width: `${size.width}px`,
-        height: `${size.height}px`
+        width: `${shapeSize.width}px`,
+        height: `${shapeSize.height}px`
       }
     }
 

@@ -1,10 +1,16 @@
 
-interface topicStyle {
+interface size {
+  width: number
+  height: number
+}
+
+export interface topicStyle {
   shapeType?: string
-
+  fontSize?: number
+  fontColor?: string
   borderWidth?: number
-
   borderColor?: string
+  fillColor?: string
 }
 
 export interface originTopicInfo {
@@ -24,10 +30,9 @@ export interface extendedTopicInfo extends originTopicInfo {
 
   index: number
 
-  size: {
-    width: number
-    height: number
-  }
+  shapeSize: size
+
+  treeSize: size
 
   children?: Array<extendedTopicInfo>
 }
