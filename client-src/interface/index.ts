@@ -34,6 +34,10 @@ export interface extendedTopicInfo extends originTopicInfo {
 
   treeSize: size
 
+  childrenTreeSize: size
+
+  position: [number, number]
+
   children?: Array<extendedTopicInfo>
 }
 
@@ -44,4 +48,5 @@ export interface stageInfo {
 export interface mapInfo {
   topicTree: originTopicInfo
   selectionList: Array<string>
+  mapStructure: string
 }

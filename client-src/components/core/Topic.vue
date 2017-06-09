@@ -1,5 +1,5 @@
 <template>
-  <div class="topic" v-bind:style="[borderStyle, sizeStyle]">
+  <div class="topic" v-bind:style="[borderStyle, sizeStyle, positionStyle]">
     <span>{{ topicInfo.title }}</span>
   </div>
 </template>
@@ -9,24 +9,6 @@
   import { Component, Prop } from 'vue-property-decorator'
   import { TopicShapeType, TopicType } from 'client-src/constants/common'
   import { extendedTopicInfo } from 'client-src/interface'
-
-  // todo
-  const testTopicInfo = {
-    id: '1',
-    title: 'Hello!',
-    style: {
-      shapeType: TopicShapeType.RECT,
-      borderWidth: 2,
-      borderColor: 'red',
-    },
-
-    type: TopicType.ROOT,
-
-    size: {
-      width: 100,
-      height: 50
-    }
-  };
 
   @Component
   class Topic extends Vue {
@@ -49,6 +31,16 @@
 
       return {
         border: `${style.borderWidth}px solid ${style.borderColor}`
+      }
+    }
+
+    /** @Computed */
+    get positionStyle() {
+      const { position } = this.topicInfo;
+
+      return {
+        left: `${position[0]}px`,
+        top: `${position[1]}px`
       }
     }
   }

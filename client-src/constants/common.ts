@@ -27,7 +27,7 @@ export const TopicShapeType = {
 /**
  * @description 布局类型
  * */
-export const LayoutType = {
+export const MapStructureType = {
   // 向右逻辑图
   LOGIC_TO_RIGHT: 'LOGIC_TO_RIGHT'
 };

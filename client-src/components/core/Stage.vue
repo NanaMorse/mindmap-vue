@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <div v-for="topicInfo in extendedTopicInfoList">
-      <topic v-bind:topicInfo="topicInfo"/>
-    </div>
+  <div class="stage">
+    <topic v-for="topicInfo in extendedTopicInfoList"
+           :key="topicInfo.id"
+           v-bind:topicInfo="topicInfo"/>
   </div>
 </template>
 
@@ -16,7 +16,8 @@
   import { getTextSize, deepCopy } from 'client-src/tools/helper'
   import { TopicType, TopicTypeToDefaultTitleKeyMap } from 'client-src/constants/common'
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
-  import { DefaultTopicStyle, TopicPaddingOverride } from 'client-src/constants/defaultstyle'
+  import { DefaultTopicStyle, TopicPaddingOverride, DefaultMapStructure } from 'client-src/constants/defaultstyle'
+  import LayoutTopics from 'client-src/layout'
   import { stageInfo, mapInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
 
   @Component({
@@ -37,11 +38,27 @@
      * @Computed
      * */
     get extendedTopicInfoList(): Array<extendedTopicInfo> {
+      const { topicTree, mapStructure } = this.mapInfo;
+
+      const extendedTopicInfoTree = this.getExtendedTopicInfoTree(topicTree);
+
+      LayoutTopics(extendedTopicInfoTree, mapStructure);
+
+      return this.coverTreeInfoToListInfo(extendedTopicInfoTree);
+    }
+
+    /** @helper */
+    coverTreeInfoToListInfo(topicTreeInfo: extendedTopicInfo): Array<extendedTopicInfo> {
       const extendedTopicInfoList = [];
 
-      const extendedTopicInfoTree = this.getExtendedTopicInfoTree(this.mapInfo.topicTree);
+      function pushTopicData(topicInfo: extendedTopicInfo) {
+        extendedTopicInfoList.push(topicInfo);
+        topicInfo.children && topicInfo.children.forEach(child => {
+          pushTopicData(child);
+        })
+      }
 
-      console.log(extendedTopicInfoTree);
+      pushTopicData(topicTreeInfo);
 
       return extendedTopicInfoList;
     }
@@ -128,13 +145,14 @@
 
       topicInfo.shapeSize = shapeSize;
     }
-
-    /** @helper */
-    setTopicLayoutInfo() {
-
-    }
   }
 
   export default Stage
 
 </script>
+
+<style lang="scss" scoped>
+  .stage {
+    position: relative;
+  }
+</style>

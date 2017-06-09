@@ -1,4 +1,4 @@
-import { TopicType, TopicShapeType } from './common'
+import { TopicType, TopicShapeType, MapStructureType } from './common'
 import { topicStyle } from '../interface'
 const { RECT, ROUNDED_RECT, PARALLELOGRAM } = TopicShapeType;
 
@@ -90,3 +90,12 @@ export const TopicPaddingOverride: topicPaddingOverrideMap = {
     }
   }
 };
+
+export const TopicMargin = {
+  [MapStructureType.LOGIC_TO_RIGHT] : {
+    marginVertical: 10,
+    marginHorizon: 20
+  }
+};
+
+export const DefaultMapStructure = MapStructureType.LOGIC_TO_RIGHT;
