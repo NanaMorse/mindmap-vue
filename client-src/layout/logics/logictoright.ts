@@ -27,14 +27,14 @@ class LogicToRight {
           childrenTreeSize.width = currentChildTreeSize.width;
         }
 
-        childrenTreeSize.height += currentChildTreeSize.height + marginVertical;
+        childrenTreeSize.height += currentChildTreeSize.height;
       });
 
-      childrenTreeSize.width += marginHorizon;
-      childrenTreeSize.height -= marginVertical;
+      childrenTreeSize.height += (children.length - 1) * marginVertical * 2;
     }
 
     treeSize.width += childrenTreeSize.width;
+    if (childrenTreeSize.width) treeSize.width += marginHorizon * 2;
     if (childrenTreeSize.height > treeSize.height) treeSize.height = childrenTreeSize.height;
 
     topicTree.treeSize = treeSize;
@@ -44,23 +44,19 @@ class LogicToRight {
   }
 
   private calcPosition(topicTree: extendedTopicInfo) {
-    const { position, childrenTreeSize, children, shapeSize } = topicTree;
+    const { position, children, childrenTreeSize, shapeSize } = topicTree;
+    let childrenTopStart = position[1] - childrenTreeSize.height / 2;
 
-    let topHeight = 0;
-
-    const childrenMiddleHeight = childrenTreeSize.height / 2;
-
-    children && children.forEach((childTree) => {
+    children && children.forEach(childTree => {
       const currentChildTreeSize = childTree.treeSize;
-      const halfChildShapeWidth = childTree.shapeSize.width / 2;
+      const currentChildShapeSize = childTree.shapeSize;
 
-      const x = position[0] + shapeSize.width / 2 + marginHorizon + halfChildShapeWidth;
-
-      let y = position[1] + topHeight + currentChildTreeSize.height / 2 - childrenMiddleHeight;
-
-      topHeight += currentChildTreeSize.height + marginVertical;
+      const x = position[0] + shapeSize.width / 2 + marginHorizon * 2 + currentChildShapeSize.width / 2;
+      const y = childrenTopStart + currentChildTreeSize.height / 2;
 
       childTree.position = [x, y];
+
+      childrenTopStart += currentChildTreeSize.height + marginVertical * 2;
 
       this.calcPosition(childTree);
     });
