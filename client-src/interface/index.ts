@@ -50,3 +50,11 @@ export interface mapInfo {
   selectionList: Array<string>
   mapStructure: string
 }
+
+export abstract class LayoutProcess {
+  abstract startLayout(topicInfo: extendedTopicInfo)
+}
+
+export abstract class CalcLineProcess {
+  abstract getConnectLinePath(topicInfo: extendedTopicInfo)
+}

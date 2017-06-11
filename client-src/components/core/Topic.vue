@@ -36,11 +36,14 @@
 
     /** @Computed */
     get positionStyle() {
-      const { position } = this.topicInfo;
+      const { position, shapeSize } = this.topicInfo;
+
+      const left = position[0] - shapeSize.width / 2;
+      const top = position[1] - shapeSize.height / 2;
 
       return {
-        left: `${position[0]}px`,
-        top: `${position[1]}px`
+        left: `${left}px`,
+        top: `${top}px`
       }
     }
   }

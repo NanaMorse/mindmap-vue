@@ -1,20 +1,20 @@
 import { TopicMargin } from '../../constants/defaultstyle';
 import { MapStructureType } from '../../constants/common';
-import { extendedTopicInfo } from '../../interface'
+import { extendedTopicInfo, LayoutProcess } from '../../interface'
 
 const { LOGIC_TO_RIGHT } = MapStructureType;
 
 const { marginHorizon, marginVertical } = TopicMargin[LOGIC_TO_RIGHT];
 
-class LogicToRight {
+class LogicToRight implements LayoutProcess{
 
-  public startLayout(topicTree: extendedTopicInfo) {
-    this.calcTreeSize(topicTree);
-    this.calcPosition(topicTree);
+  public startLayout(topicInfo: extendedTopicInfo) {
+    this.calcTreeSize(topicInfo);
+    this.calcPosition(topicInfo);
   }
 
-  private calcTreeSize(topicTree: extendedTopicInfo) {
-    const { shapeSize, children } = topicTree;
+  private calcTreeSize(topicInfo: extendedTopicInfo) {
+    const { shapeSize, children } = topicInfo;
 
     const treeSize = { width: shapeSize.width, height: shapeSize.height };
     const childrenTreeSize = { width: 0, height: 0 };
@@ -37,14 +37,14 @@ class LogicToRight {
     if (childrenTreeSize.width) treeSize.width += marginHorizon * 2;
     if (childrenTreeSize.height > treeSize.height) treeSize.height = childrenTreeSize.height;
 
-    topicTree.treeSize = treeSize;
-    topicTree.childrenTreeSize = childrenTreeSize;
+    topicInfo.treeSize = treeSize;
+    topicInfo.childrenTreeSize = childrenTreeSize;
 
     return treeSize;
   }
 
-  private calcPosition(topicTree: extendedTopicInfo) {
-    const { position, children, childrenTreeSize, shapeSize } = topicTree;
+  private calcPosition(topicInfo: extendedTopicInfo) {
+    const { position, children, childrenTreeSize, shapeSize } = topicInfo;
     let childrenTopStart = position[1] - childrenTreeSize.height / 2;
 
     children && children.forEach(childTree => {
