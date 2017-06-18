@@ -6,8 +6,11 @@
              v-bind:topicInfo="topicInfo"/>
     </div>
     <svg class="lines-container">
-      <path v-for="(linePath, key) in topicLinePathList"
-            :key="key" v-bind:d="linePath"/>
+      <connect-line v-for="topicInfo in extendedTopicInfoList"
+            v-if="topicInfo.children"
+            :key="topicInfo.id"
+            v-bind:topicInfo="topicInfo"
+            v-bind:mapStructure="mapInfo.mapStructure"/>
     </svg>
   </div>
 </template>
@@ -19,23 +22,22 @@
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
   import Topic from './Topic.vue'
+  import Line from './Line.vue'
   import { getTextSize, deepCopy } from 'client-src/tools/helper'
   import { TopicType, TopicTypeToDefaultTitleKeyMap } from 'client-src/constants/common'
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
   import { DefaultTopicStyle, TopicPaddingOverride, DefaultMapStructure } from 'client-src/constants/defaultstyle'
   import LayoutTopics from 'client-src/layout'
-  import CalcTopicLines from 'client-src/calclines'
   import { stageInfo, mapInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
 
   @Component({
     components: {
-      'topic': Topic
+      'topic': Topic,
+      'connect-line': Line
     }
   })
 
   class Stage extends Vue {
-
-    private extendedTopicInfoTree: extendedTopicInfo;
 
     @Prop()
     stageInfo: stageInfo;
@@ -44,37 +46,17 @@
     mapInfo: mapInfo;
 
     /**
-     * @todo better practice?
-     * */
-    beforeMount() {
-      this.extendedTopicInfoTree = this.getFullExtendedTopicInfoTree()
-    }
-
-    beforeUpdate() {
-      this.extendedTopicInfoTree = this.getFullExtendedTopicInfoTree()
-    }
-
-    /**
      * @description get extended topic info list
      * @Computed
      * */
     get extendedTopicInfoList(): Array<extendedTopicInfo> {
-      return this.coverTreeInfoToListInfo(this.extendedTopicInfoTree);
-    }
-
-    get topicLinePathList(): Array<string> {
-      return CalcTopicLines(this.extendedTopicInfoTree, this.mapInfo.mapStructure);
-    }
-
-    /** @helper */
-    getFullExtendedTopicInfoTree(): extendedTopicInfo {
       const { topicTree, mapStructure } = this.mapInfo;
 
-      const extendedTopicInfoTree = this.calcTopicExtendInfoWithoutPosition(topicTree);
+      const extendedTopicInfoTree = this.getExtendedTopicInfoTree(topicTree);
 
       LayoutTopics(extendedTopicInfoTree, mapStructure);
 
-      return extendedTopicInfoTree;
+      return this.coverTreeInfoToListInfo(extendedTopicInfoTree);
     }
 
     /** @helper */
@@ -97,7 +79,7 @@
      * @description get extended topic info tree
      * @helper
      * */
-    calcTopicExtendInfoWithoutPosition(topicInfo: originTopicInfo): extendedTopicInfo {
+    getExtendedTopicInfoTree(topicInfo: originTopicInfo): extendedTopicInfo {
       const extendedTopicInfo: extendedTopicInfo = deepCopy(topicInfo) as extendedTopicInfo;
 
       // get the extended info about it's parent
@@ -111,7 +93,7 @@
       // set children's extended info
       if ( extendedTopicInfo.children) {
         extendedTopicInfo.children = extendedTopicInfo.children.map(childTopicInfo => {
-          return this.calcTopicExtendInfoWithoutPosition(childTopicInfo);
+          return this.getExtendedTopicInfoTree(childTopicInfo);
         });
       }
 
@@ -195,9 +177,5 @@
     display: block;
     width: 100%;
     height: 100%;
-
-    path {
-      stroke: #000;
-    }
   }
 </style>
