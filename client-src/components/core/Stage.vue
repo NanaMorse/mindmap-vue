@@ -1,8 +1,14 @@
 <template>
   <div class="stage">
-    <topic v-for="topicInfo in extendedTopicInfoList"
-           :key="topicInfo.id"
-           v-bind:topicInfo="topicInfo"/>
+    <div class="topics-container">
+      <topic v-for="topicInfo in extendedTopicInfoList"
+             :key="topicInfo.id"
+             v-bind:topicInfo="topicInfo"/>
+    </div>
+    <svg class="lines-container">
+      <path v-for="(linePath, key) in topicLinePathList"
+            :key="key" v-bind:d="linePath"/>
+    </svg>
   </div>
 </template>
 
@@ -18,6 +24,7 @@
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
   import { DefaultTopicStyle, TopicPaddingOverride, DefaultMapStructure } from 'client-src/constants/defaultstyle'
   import LayoutTopics from 'client-src/layout'
+  import CalcTopicLines from 'client-src/calclines'
   import { stageInfo, mapInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
 
   @Component({
@@ -27,6 +34,9 @@
   })
 
   class Stage extends Vue {
+
+    private extendedTopicInfoTree: extendedTopicInfo;
+
     @Prop()
     stageInfo: stageInfo;
 
@@ -34,17 +44,37 @@
     mapInfo: mapInfo;
 
     /**
+     * @todo better practice?
+     * */
+    beforeMount() {
+      this.extendedTopicInfoTree = this.getFullExtendedTopicInfoTree()
+    }
+
+    beforeUpdate() {
+      this.extendedTopicInfoTree = this.getFullExtendedTopicInfoTree()
+    }
+
+    /**
      * @description get extended topic info list
      * @Computed
      * */
     get extendedTopicInfoList(): Array<extendedTopicInfo> {
+      return this.coverTreeInfoToListInfo(this.extendedTopicInfoTree);
+    }
+
+    get topicLinePathList(): Array<string> {
+      return CalcTopicLines(this.extendedTopicInfoTree, this.mapInfo.mapStructure);
+    }
+
+    /** @helper */
+    getFullExtendedTopicInfoTree(): extendedTopicInfo {
       const { topicTree, mapStructure } = this.mapInfo;
 
-      const extendedTopicInfoTree = this.getExtendedTopicInfoTree(topicTree);
+      const extendedTopicInfoTree = this.calcTopicExtendInfoWithoutPosition(topicTree);
 
       LayoutTopics(extendedTopicInfoTree, mapStructure);
 
-      return this.coverTreeInfoToListInfo(extendedTopicInfoTree);
+      return extendedTopicInfoTree;
     }
 
     /** @helper */
@@ -67,7 +97,7 @@
      * @description get extended topic info tree
      * @helper
      * */
-    getExtendedTopicInfoTree(topicInfo: originTopicInfo): extendedTopicInfo {
+    calcTopicExtendInfoWithoutPosition(topicInfo: originTopicInfo): extendedTopicInfo {
       const extendedTopicInfo: extendedTopicInfo = deepCopy(topicInfo) as extendedTopicInfo;
 
       // get the extended info about it's parent
@@ -81,7 +111,7 @@
       // set children's extended info
       if ( extendedTopicInfo.children) {
         extendedTopicInfo.children = extendedTopicInfo.children.map(childTopicInfo => {
-          return this.getExtendedTopicInfoTree(childTopicInfo);
+          return this.calcTopicExtendInfoWithoutPosition(childTopicInfo);
         });
       }
 
@@ -153,6 +183,21 @@
 
 <style lang="scss" scoped>
   .stage {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .topics-container {
     position: relative;
+  }
+
+  .lines-container {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    path {
+      stroke: #000;
+    }
   }
 </style>
