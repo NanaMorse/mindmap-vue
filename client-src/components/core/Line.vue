@@ -1,5 +1,5 @@
 <template>
-  <path v-bind:d="linePath"/>
+  <path v-bind:d="linePath" v-bind:style="lineStyle"/>
 </template>
 
 <script lang="ts">
@@ -22,6 +22,15 @@
       return CalcTopicLine(this.topicInfo, this.mapStructure);
     }
 
+    /** @Computed */
+    get lineStyle() {
+      const { lineWidth, lineColor } = this.topicInfo.style;
+
+      return {
+        strokeWidth: lineWidth,
+        stroke: lineColor
+      }
+    }
   }
 
   export default Line;
@@ -29,7 +38,5 @@
 </script>
 
 <style lang="scss" scoped>
-  path {
-    stroke: #000;
-  }
+
 </style>

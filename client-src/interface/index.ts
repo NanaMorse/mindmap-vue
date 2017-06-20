@@ -6,11 +6,17 @@ interface size {
 
 export interface topicStyle {
   shapeType?: string
+
   fontSize?: number
   fontColor?: string
+
   borderWidth?: number
   borderColor?: string
+
   fillColor?: string
+
+  lineWidth?: number
+  lineColor?: string
 }
 
 export interface originTopicInfo {

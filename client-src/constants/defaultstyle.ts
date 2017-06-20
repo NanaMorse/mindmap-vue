@@ -13,7 +13,9 @@ export const DefaultTopicStyle: defaultTopicStyleMap = {
     fontColor: "#4c4c4c",
     borderWidth: 2,
     borderColor: '#000000',
-    fillColor: '#cbdefd'
+    fillColor: '#cbdefd',
+    lineWidth: 1,
+    lineColor: '#000'
   },
 
   [TopicType.MAIN]: {
@@ -22,7 +24,9 @@ export const DefaultTopicStyle: defaultTopicStyleMap = {
     fontColor: "#4c4c4c",
     borderWidth: 2,
     borderColor: '#000000',
-    fillColor: '#fef4ec'
+    fillColor: '#fef4ec',
+    lineWidth: 1,
+    lineColor: '#000'
   },
 
   [TopicType.SUB]: {
@@ -31,7 +35,9 @@ export const DefaultTopicStyle: defaultTopicStyleMap = {
     fontColor: "#4c4c4c",
     borderWidth: 2,
     borderColor: '#000000',
-    fillColor: '#fef4ec'
+    fillColor: '#fef4ec',
+    lineWidth: 1,
+    lineColor: '#000'
   },
 };
 
