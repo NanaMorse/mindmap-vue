@@ -1,16 +1,13 @@
 import Vue from 'vue'
 import Stage from './components/core/Stage.vue'
-import testData from './testData'
+import Store from './store'
 
 new Vue({
   el: '#app',
 
+  store: Store,
+
   render(h) {
-    return h(Stage, {
-      props: {
-        stageInfo: testData.stage,
-        mapInfo: testData.map
-      }
-    })
+    return h(Stage)
   }
 });

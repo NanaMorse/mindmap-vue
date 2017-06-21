@@ -10,7 +10,7 @@
             v-if="topicInfo.children"
             :key="topicInfo.id"
             v-bind:topicInfo="topicInfo"
-            v-bind:mapStructure="mapInfo.mapStructure"/>
+            v-bind:mapStructure="map.mapStructure"/>
     </svg>
   </div>
 </template>
@@ -21,6 +21,7 @@
    * */
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
+  import { State } from 'vuex-class'
   import Topic from './Topic.vue'
   import Line from './Line.vue'
   import { getTextSize, deepCopy } from 'client-src/tools/helper'
@@ -28,7 +29,7 @@
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
   import { DefaultTopicStyle, TopicPaddingOverride, DefaultMapStructure } from 'client-src/constants/defaultstyle'
   import LayoutTopics from 'client-src/layout'
-  import { stageInfo, mapInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
+  import { mapInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
 
   @Component({
     components: {
@@ -39,18 +40,14 @@
 
   class Stage extends Vue {
 
-    @Prop()
-    stageInfo: stageInfo;
-
-    @Prop()
-    mapInfo: mapInfo;
+    @State('map') map: mapInfo;
 
     /**
      * @description get extended topic info list
      * @Computed
      * */
     get extendedTopicInfoList(): Array<extendedTopicInfo> {
-      const { topicTree, mapStructure } = this.mapInfo;
+      const { topicTree, mapStructure } = this.map;
 
       const extendedTopicInfoTree = this.getExtendedTopicInfoTree(topicTree);
 
@@ -106,7 +103,7 @@
      * @helper
      * @return the parent topic info of a topic node
      * */
-    getTopicParentNode(topicInfo: originTopicInfo, treeLevelToCheck: originTopicInfo = this.mapInfo.topicTree): originTopicInfo {
+    getTopicParentNode(topicInfo: originTopicInfo, treeLevelToCheck: originTopicInfo = this.map.topicTree): originTopicInfo {
       // if the topicInfo to check is the current check level, it means this topic is the ROOT topic
       if (topicInfo.id === treeLevelToCheck.id) return null;
       // start traversing

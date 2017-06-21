@@ -47,6 +47,11 @@ export interface extendedTopicInfo extends originTopicInfo {
   children?: Array<extendedTopicInfo>
 }
 
+export interface stateInfo {
+  map: mapInfo
+  stage: stageInfo
+}
+
 export interface stageInfo {
   backgroundColor: string
 }
