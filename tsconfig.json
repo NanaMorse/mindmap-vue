@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "target": "es6",
     "paths": {
-      "client-src/*": ["./client-src"]
+      "client-src/*": ["./client-src/*"]
     }
   },
   "exclude": [
