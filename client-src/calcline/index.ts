@@ -1,6 +1,6 @@
-import { MapStructureType } from '../constants/common'
-import { DefaultMapStructure } from '../constants/defaultstyle'
-import { extendedTopicInfo } from '../interface'
+import { MapStructureType } from 'client-src/constants/common'
+import { DefaultMapStructure } from 'client-src/constants/defaultstyle'
+import { extendedTopicInfo } from 'client-src/interface'
 import logicToRight from './logics/logictoright'
 
 /**

@@ -1,6 +1,6 @@
-import { TopicShapeType, MapStructureType } from '../../constants/common'
-import { TopicMargin } from '../../constants/defaultstyle'
-import { CalcLineProcess, extendedTopicInfo } from '../../interface'
+import { TopicShapeType, MapStructureType } from 'client-src/constants/common'
+import { TopicMargin } from 'client-src/constants/defaultstyle'
+import { CalcLineProcess, extendedTopicInfo } from 'client-src/interface'
 
 const { marginHorizon } = TopicMargin[MapStructureType.LOGIC_TO_RIGHT];
 

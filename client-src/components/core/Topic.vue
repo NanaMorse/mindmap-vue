@@ -1,7 +1,8 @@
 <template>
   <div class="topic" v-bind:style="topicStyle"
        v-on:mouseover="onTopicMouseOver"
-       v-on:mouseout="onTopicMouseOut" >
+       v-on:mouseout="onTopicMouseOut"
+       v-on:click.stop="onTopicClick">
     <span>{{ topicInfo.title }}</span>
     <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
   </div>
@@ -10,9 +11,12 @@
 <script lang="ts">
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
-  import { State } from 'vuex-class'
+  import { State, Mutation } from 'vuex-class'
   import { TopicShapeType, TopicType } from 'client-src/constants/common'
+  import { map } from 'client-src/constants/mutations'
   import { extendedTopicInfo, stateInfo } from 'client-src/interface'
+
+  const { selectionEdit } = map;
 
   const selectBoxToTopicBorderDistance = 5;
 
@@ -23,6 +27,12 @@
 
     @State((state: stateInfo) => state.map.selectionList)
     selectionList: Array<string>;
+
+    @Mutation(selectionEdit.setSingleSelection) setSingleSelection;
+
+    @Mutation(selectionEdit.addSelectionToList) addSelectionToList;
+
+    @Mutation(selectionEdit.removeSelectionFromList) removeSelectionFromList;
 
     /** @Data */
     isTopicHovering: boolean = false;
@@ -78,12 +88,33 @@
       return [displayStyle, sizeStyle, borderStyle];
     }
 
+    /** @Listener */
     onTopicMouseOver() {
       this.isTopicHovering = true;
     }
 
+    /** @Listener */
     onTopicMouseOut() {
       this.isTopicHovering = false;
+    }
+
+    /** @Listener */
+    onTopicClick(e: MouseEvent) {
+      const { id } = this.topicInfo;
+
+      const isPressCtrl = e.metaKey || e.ctrlKey;
+
+      if (this.selectionList.indexOf(id) === -1) {
+        if (isPressCtrl) {
+          return this.addSelectionToList({ id });
+        } else {
+          return this.setSingleSelection({ id });
+        }
+      }
+
+      else if (isPressCtrl) {
+        return this.removeSelectionFromList({ id });
+      }
     }
   }
 

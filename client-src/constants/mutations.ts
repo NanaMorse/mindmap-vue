@@ -8,5 +8,4 @@ export const map = {
     clearSelectionList: 'clearSelectionList'
   },
 
-
 };

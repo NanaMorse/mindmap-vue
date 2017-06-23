@@ -1,5 +1,5 @@
 <template>
-  <div class="stage">
+  <div class="stage" v-on:click="onStageClick">
     <div class="topics-container">
       <topic v-for="topicInfo in extendedTopicInfoList"
              :key="topicInfo.id"
@@ -21,15 +21,18 @@
    * */
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
-  import { State } from 'vuex-class'
+  import { State, Mutation } from 'vuex-class'
   import Topic from './Topic.vue'
   import Line from './Line.vue'
   import { getTextSize, deepCopy } from 'client-src/tools/helper'
   import { TopicType, TopicTypeToDefaultTitleKeyMap } from 'client-src/constants/common'
+  import { map } from 'client-src/constants/mutations'
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
   import { DefaultTopicStyle, TopicPaddingOverride, DefaultMapStructure } from 'client-src/constants/defaultstyle'
   import LayoutTopics from 'client-src/layout'
   import { mapInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
+
+  const { selectionEdit } = map;
 
   @Component({
     components: {
@@ -41,6 +44,8 @@
   class Stage extends Vue {
 
     @State('map') map: mapInfo;
+
+    @Mutation(selectionEdit.clearSelectionList) clearSelectionList;
 
     /**
      * @description get extended topic info list
@@ -153,6 +158,11 @@
       shapeSize.height = topicTitleSize.height + fontSize * paddingVertical * 2;
 
       topicInfo.shapeSize = shapeSize;
+    }
+
+    /** @Listener */
+    onStageClick() {
+      this.map.selectionList.length && this.clearSelectionList();
     }
   }
 

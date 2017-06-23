@@ -48,6 +48,7 @@ export interface extendedTopicInfo extends originTopicInfo {
 }
 
 export interface stateInfo {
+  app: {}
   map: mapInfo
   stage: stageInfo
 }
@@ -59,7 +60,7 @@ export interface stageInfo {
 export interface mapInfo {
   topicTree: originTopicInfo
   selectionList: Array<string>
-  mapStructure: string
+  mapStructure?: string
 }
 
 export abstract class LayoutProcess {
