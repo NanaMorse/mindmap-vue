@@ -40,3 +40,8 @@ export const TopicTypeToDefaultTitleKeyMap = {
   [TopicType.MAIN]: defaultTitle.mainTopic,
   [TopicType.SUB]: defaultTitle.subTopic
 };
+
+/** @description keyCode */
+export const KeyCodeMap = {
+  ENTER: 13
+};

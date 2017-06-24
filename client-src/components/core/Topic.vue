@@ -3,7 +3,7 @@
        v-on:mouseover="onTopicMouseOver"
        v-on:mouseout="onTopicMouseOut"
        v-on:click.stop="onTopicClick">
-    <span>{{ topicInfo.title }}</span>
+    <span>{{ topicTitle }}</span>
     <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
   </div>
 </template>
@@ -12,7 +12,7 @@
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
-  import { TopicShapeType, TopicType } from 'client-src/constants/common'
+  import { TopicShapeType, TopicType, TopicTypeToDefaultTitleKeyMap } from 'client-src/constants/common'
   import { map } from 'client-src/constants/mutations'
   import { extendedTopicInfo, stateInfo } from 'client-src/interface'
 
@@ -36,6 +36,11 @@
 
     /** @Data */
     isTopicHovering: boolean = false;
+
+    /** @Computed */
+    get topicTitle() {
+      return this.topicInfo.title || TopicTypeToDefaultTitleKeyMap[this.topicInfo.type]
+    }
 
     /** @Computed */
     get topicStyle() {

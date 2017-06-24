@@ -5,7 +5,15 @@ export const map = {
     setSingleSelection: 'setSingleSelection',
     addSelectionToList: 'addSelectionToList',
     removeSelectionFromList: 'removeSelectionFromList',
-    clearSelectionList: 'clearSelectionList'
+    clearSelectionList: 'clearSelectionList',
+
   },
 
+  topicTreeEdit: {
+    addChildTopic: 'addChildTopic',
+    addTopicBefore: 'addTopicBefore',
+    addTopicAfter: 'addTopicAfter',
+    addParentTopic: 'addParentTopic',
+    removeTopic: 'removeTopic'
+  }
 };

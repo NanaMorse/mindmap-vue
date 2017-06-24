@@ -32,9 +32,7 @@ export default {
         "lineClass": "ROUNDED"
       }
     },
-    "selectionList": [
-      "960a6c8bd9697dc4502188d0e3"
-    ]
+    "selectionList": []
   },
   "stage": {
     "backgroundColor": "#ffffff"

@@ -1,5 +1,7 @@
 <template>
-  <div class="stage" v-on:click="onStageClick">
+  <div class="stage"
+       v-on:click="onStageClick"
+       v-on:keyup.enter="onStagePressEnter">
     <div class="topics-container">
       <topic v-for="topicInfo in extendedTopicInfoList"
              :key="topicInfo.id"
@@ -24,15 +26,15 @@
   import { State, Mutation } from 'vuex-class'
   import Topic from './Topic.vue'
   import Line from './Line.vue'
-  import { getTextSize, deepCopy } from 'client-src/tools/helper'
-  import { TopicType, TopicTypeToDefaultTitleKeyMap } from 'client-src/constants/common'
+  import { getTextSize, deepCopy, generateUUID } from 'client-src/tools/helper'
+  import { TopicType, TopicTypeToDefaultTitleKeyMap, KeyCodeMap } from 'client-src/constants/common'
   import { map } from 'client-src/constants/mutations'
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
   import { DefaultTopicStyle, TopicPaddingOverride, DefaultMapStructure } from 'client-src/constants/defaultstyle'
   import LayoutTopics from 'client-src/layout'
   import { mapInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
 
-  const { selectionEdit } = map;
+  const { selectionEdit, topicTreeEdit } = map;
 
   @Component({
     components: {
@@ -45,7 +47,23 @@
 
     @State('map') map: mapInfo;
 
+    @Mutation(selectionEdit.setSingleSelection) setSingleSelection;
+
     @Mutation(selectionEdit.clearSelectionList) clearSelectionList;
+
+    @Mutation(topicTreeEdit.addChildTopic) addChildTopic;
+
+    created() {
+      const body = document.querySelector('body');
+
+      window.addEventListener('keyup', (e: KeyboardEvent) => {
+        switch (e.keyCode) {
+          case KeyCodeMap.ENTER: {
+            return this.onStagePressEnter();
+          }
+        }
+      })
+    }
 
     /**
      * @description get extended topic info list
@@ -163,6 +181,16 @@
     /** @Listener */
     onStageClick() {
       this.map.selectionList.length && this.clearSelectionList();
+    }
+
+    /** @Listener */
+    onStagePressEnter() {
+      if (!this.map.selectionList.length) return;
+
+      const newTopicId = generateUUID();
+
+      this.addChildTopic({ newTopicInfo: { id: newTopicId } });
+      this.setSingleSelection({ id: newTopicId });
     }
   }
 
