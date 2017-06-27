@@ -1,9 +1,11 @@
 <template>
-  <div class="topic" v-bind:style="topicStyle"
-       v-on:mouseover="onTopicMouseOver"
-       v-on:mouseout="onTopicMouseOut"
-       v-on:click.stop="onTopicClick">
-    <span>{{ topicTitle }}</span>
+  <div>
+    <div class="topic" v-bind:style="topicStyle"
+         v-on:mouseover="onTopicMouseOver"
+         v-on:mouseout="onTopicMouseOut"
+         v-on:click.stop="onTopicClick">
+      <span>{{ topicTitle }}</span>
+    </div>
     <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
   </div>
 </template>
@@ -77,11 +79,14 @@
 
       if (!this.isSelectBoxVisible) return [displayStyle];
 
-      const { shapeSize } = this.topicInfo;
+      const { shapeSize, position } = this.topicInfo;
+
+      const width = shapeSize.width + selectBoxToTopicBorderDistance * 2;
+      const height = shapeSize.height + selectBoxToTopicBorderDistance * 2;
 
       const sizeStyle = {
-        width: `${shapeSize.width + selectBoxToTopicBorderDistance * 2}px`,
-        height: `${shapeSize.height + selectBoxToTopicBorderDistance * 2}px`
+        width: `${width}px`,
+        height: `${height}px`
       };
 
       const isTopicSelected = this.selectionList.indexOf(this.topicInfo.id) !== -1;
@@ -90,7 +95,12 @@
         borderRadius: '5px'
       };
 
-      return [displayStyle, sizeStyle, borderStyle];
+      const positionStyle = {
+        left: `${position[0] - width / 2}px`,
+        top: `${position[1] - height / 2}px`
+      };
+
+      return [displayStyle, sizeStyle, borderStyle, positionStyle];
     }
 
     /** @Listener */
@@ -138,5 +148,6 @@
 
   .topic-select-box {
     position: absolute;
+    pointer-events: none;
   }
 </style>

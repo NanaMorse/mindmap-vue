@@ -15,5 +15,9 @@ export const map = {
     addTopicAfter: 'addTopicAfter',
     addParentTopic: 'addParentTopic',
     removeTopic: 'removeTopic'
+  },
+
+  topicTextEdit: {
+    setTitle: 'setTitle'
   }
 };

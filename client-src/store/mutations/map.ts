@@ -97,7 +97,7 @@ const topicTreeWalkHelper = new class {
   }
 };
 
-const { selectionEdit, topicTreeEdit } = map;
+const { selectionEdit, topicTreeEdit, topicTextEdit } = map;
 
 const selectionEditMutations = {
   /**
@@ -145,10 +145,24 @@ const topicTreeEditMutations = {
 
       targetTopicInfo.children.push(newTopicInfo);
     });
+  },
+
+  /**
+   * @description remove topic, all selected topic will be removed
+   * */
+  [topicTreeEdit.removeTopic](state: stateInfo) {
+
+  }
+};
+
+const topicTextEditMutations = {
+  [topicTextEdit.setTitle](state: stateInfo) {
+
   }
 };
 
 export default {
   ...selectionEditMutations,
-  ...topicTreeEditMutations
+  ...topicTreeEditMutations,
+  ...topicTextEditMutations
 }
