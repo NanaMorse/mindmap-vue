@@ -7,6 +7,7 @@
       <span>{{ topicTitle }}</span>
     </div>
     <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
+    <input class="topic-edit-receiver" v-bind:style="topicEditReceiverStyle"/>
   </div>
 </template>
 
@@ -24,6 +25,9 @@
 
   @Component
   class Topic extends Vue {
+
+    private $el: HTMLElement;
+
     @Prop()
     topicInfo: extendedTopicInfo;
 
@@ -38,6 +42,9 @@
 
     /** @Data */
     isTopicHovering: boolean = false;
+
+    /** @Data */
+    isEditing: boolean = false;
 
     /** @Computed */
     get topicTitle() {
@@ -103,6 +110,15 @@
       return [displayStyle, sizeStyle, borderStyle, positionStyle];
     }
 
+    /** @Computed */
+    get topicEditReceiverStyle() {
+      const displayStyle = {
+        visibility: this.isEditing ? 'visible' : 'hidden'
+      };
+
+      if (!this.isEditing) return [displayStyle];
+    }
+
     /** @Listener */
     onTopicMouseOver() {
       this.isTopicHovering = true;
@@ -115,6 +131,16 @@
 
     /** @Listener */
     onTopicClick(e: MouseEvent) {
+      this.updateSelection(e);
+
+      this.isEditing = true;
+      this.$el.querySelector('.topic-edit-receiver').focus();
+    }
+
+    /**
+     * @description 更新selection
+     * */
+    updateSelection(e: MouseEvent) {
       const { id } = this.topicInfo;
 
       const isPressCtrl = e.metaKey || e.ctrlKey;
@@ -149,5 +175,9 @@
   .topic-select-box {
     position: absolute;
     pointer-events: none;
+  }
+
+  .topic-edit-receiver {
+    position: absolute;
   }
 </style>
