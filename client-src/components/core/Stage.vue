@@ -184,8 +184,8 @@
     }
 
     /** @Listener */
-    onStagePressEnter() {
-      if (!this.map.selectionList.length) return;
+    onStagePressEnter(e) {
+      if (!this.map.selectionList.length || !e) return;
 
       const newTopicId = generateUUID();
 

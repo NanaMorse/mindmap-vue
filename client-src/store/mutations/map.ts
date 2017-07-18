@@ -97,7 +97,7 @@ const topicTreeWalkHelper = new class {
   }
 };
 
-const { selectionEdit, topicTreeEdit, topicTextEdit } = map;
+const { selectionEdit, topicTreeEdit, topicTitleEdit } = map;
 
 const selectionEditMutations = {
   /**
@@ -155,14 +155,16 @@ const topicTreeEditMutations = {
   }
 };
 
-const topicTextEditMutations = {
-  [topicTextEdit.setTitle](state: stateInfo) {
-
+const topicTitleEditMutations = {
+  [topicTitleEdit.setTitle](state: stateInfo, { title }: { title: string }) {
+    topicTreeWalkHelper.updateSingleSelectionInfo(state, (targetTopicInfo) => {
+      targetTopicInfo.title = title;
+    });
   }
 };
 
 export default {
   ...selectionEditMutations,
   ...topicTreeEditMutations,
-  ...topicTextEditMutations
+  ...topicTitleEditMutations
 }

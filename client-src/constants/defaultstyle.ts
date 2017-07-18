@@ -104,4 +104,7 @@ export const TopicMargin = {
   }
 };
 
+export const EditReceiverMinWidth = 200;
+export const EditReceiverHeight = 20;
+
 export const DefaultMapStructure = MapStructureType.LOGIC_TO_RIGHT;

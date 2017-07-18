@@ -17,7 +17,7 @@ export const map = {
     removeTopic: 'removeTopic'
   },
 
-  topicTextEdit: {
+  topicTitleEdit: {
     setTitle: 'setTitle'
   }
 };

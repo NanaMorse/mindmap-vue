@@ -1,13 +1,16 @@
 <template>
   <div>
     <div class="topic" v-bind:style="topicStyle"
-         v-on:mouseover="onTopicMouseOver"
-         v-on:mouseout="onTopicMouseOut"
-         v-on:click.stop="onTopicClick">
+         @mouseover="onTopicMouseOver"
+         @mouseout="onTopicMouseOut"
+         @click.stop="onTopicClick"
+         @dblclick.stop="onTopicDoubleClick">
       <span>{{ topicTitle }}</span>
     </div>
     <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
-    <input class="topic-edit-receiver" v-bind:style="topicEditReceiverStyle"/>
+    <input class="topic-title-editor" v-bind:style="topicTitleEditorStyle"
+           @keyup.enter.stop="onTitleEditorPressEnter"
+           @blur="onTitleEditorBlur"/>
   </div>
 </template>
 
@@ -16,17 +19,20 @@
   import { Component, Prop } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
   import { TopicShapeType, TopicType, TopicTypeToDefaultTitleKeyMap } from 'client-src/constants/common'
+  import { EditReceiverMinWidth, EditReceiverHeight } from 'client-src/constants/defaultstyle'
   import { map } from 'client-src/constants/mutations'
   import { extendedTopicInfo, stateInfo } from 'client-src/interface'
 
-  const { selectionEdit } = map;
+  const { selectionEdit, topicTitleEdit } = map;
 
   const selectBoxToTopicBorderDistance = 5;
 
   @Component
   class Topic extends Vue {
 
-    private $el: HTMLElement;
+    $el: HTMLElement;
+
+    $titleEditor: HTMLInputElement;
 
     @Prop()
     topicInfo: extendedTopicInfo;
@@ -39,6 +45,13 @@
     @Mutation(selectionEdit.addSelectionToList) addSelectionToList;
 
     @Mutation(selectionEdit.removeSelectionFromList) removeSelectionFromList;
+
+    @Mutation(topicTitleEdit.setTitle) setTitle;
+
+    /** @LifeCircle */
+    mounted() {
+      this.$titleEditor = this.$el.querySelector('.topic-title-editor') as HTMLInputElement;
+    }
 
     /** @Data */
     isTopicHovering: boolean = false;
@@ -111,12 +124,29 @@
     }
 
     /** @Computed */
-    get topicEditReceiverStyle() {
+    get topicTitleEditorStyle() {
       const displayStyle = {
-        visibility: this.isEditing ? 'visible' : 'hidden'
+        opacity: this.isEditing ? 1 : 0,
+        zIndex: this.isEditing ? 1 : -1
       };
 
       if (!this.isEditing) return [displayStyle];
+
+      const { shapeSize, position } = this.topicInfo;
+
+      const width = Math.max(shapeSize.width + 60, EditReceiverMinWidth);
+
+      const sizeStyle = {
+        width: `${width}px`,
+        height: `${EditReceiverHeight}px`
+      };
+
+      const positionStyle = {
+        left: `${position[0] - width / 2}px`,
+        top: `${position[1] - EditReceiverHeight / 2}px`
+      };
+
+      return [sizeStyle, positionStyle];
     }
 
     /** @Listener */
@@ -133,8 +163,35 @@
     onTopicClick(e: MouseEvent) {
       this.updateSelection(e);
 
+      this.$titleEditor.focus();
+    }
+
+    /** @Listener */
+    onTopicDoubleClick() {
       this.isEditing = true;
-      this.$el.querySelector('.topic-edit-receiver').focus();
+      this.$titleEditor.value = this.topicInfo.title || '';
+      this.$titleEditor.select();
+    }
+
+    /** @Listener */
+    onTitleEditorPressEnter() {
+      if (!this.isEditing) return;
+      this.$titleEditor.blur();
+    }
+
+    /** @Listener */
+    onTitleEditorBlur() {
+      if (!this.isEditing) return;
+
+      this.isEditing = false;
+
+      const newTitle = this.$titleEditor.value.trim();
+
+      if (newTitle !== this.topicInfo.title) {
+        this.setTitle({ title: newTitle });
+      }
+
+      this.$titleEditor.value = '';
     }
 
     /**
@@ -177,7 +234,7 @@
     pointer-events: none;
   }
 
-  .topic-edit-receiver {
+  .topic-title-editor {
     position: absolute;
   }
 </style>
