@@ -1,3 +1,4 @@
+import { extendedTopicInfo } from 'client-src/interface'
 
 export function deepCopy<T>(target: T): T {
   return JSON.parse(JSON.stringify(target));
@@ -32,3 +33,5 @@ export const getTextSize = (() => {
     };
   }
 })();
+
+export const extendedTopicInfoGlobalMap: Map<string, extendedTopicInfo> = new Map();

@@ -1,7 +1,6 @@
 <template>
   <div class="stage"
-       v-on:click="onStageClick"
-       v-on:keyup.enter="onStagePressEnter">
+       v-on:click="onStageClick">
     <div class="topics-container">
       <topic v-for="topicInfo in extendedTopicInfoList"
              :key="topicInfo.id"
@@ -9,7 +8,7 @@
     </div>
     <svg class="lines-container">
       <connect-line v-for="topicInfo in extendedTopicInfoList"
-            v-if="topicInfo.children"
+            v-if="topicInfo.children && topicInfo.children.length"
             :key="topicInfo.id"
             v-bind:topicInfo="topicInfo"
             v-bind:mapStructure="map.mapStructure"/>
@@ -26,7 +25,7 @@
   import { State, Mutation } from 'vuex-class'
   import Topic from './Topic.vue'
   import Line from './Line.vue'
-  import { getTextSize, deepCopy, generateUUID } from 'client-src/tools/helper'
+  import { getTextSize, deepCopy, generateUUID, extendedTopicInfoGlobalMap } from 'client-src/tools/helper'
   import { TopicType, TopicTypeToDefaultTitleKeyMap, KeyCodeMap } from 'client-src/constants/common'
   import { map } from 'client-src/constants/mutations'
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
@@ -53,6 +52,21 @@
 
     @Mutation(topicTreeEdit.addChildTopic) addChildTopic;
 
+    @Mutation(topicTreeEdit.removeTopic) removeTopic;
+
+    /** @LifeCircle */
+    mounted() {
+      window.addEventListener('keyup', (e: KeyboardEvent) => {
+        if (!this.map.selectionList.length) return;
+
+        switch (e.keyCode) {
+          case 13: return this.onUserPressEnterOnTopic();
+          case 46: return this.onUserPressDeleteOnTopic();
+          case 8: return this.onUserPressDeleteOnTopic();
+        }
+      });
+    }
+
     /**
      * @description get extended topic info list
      * @Computed
@@ -71,8 +85,11 @@
     coverTreeInfoToListInfo(topicTreeInfo: extendedTopicInfo): Array<extendedTopicInfo> {
       const extendedTopicInfoList = [];
 
+      extendedTopicInfoGlobalMap.clear();
+
       function pushTopicData(topicInfo: extendedTopicInfo) {
         extendedTopicInfoList.push(topicInfo);
+        extendedTopicInfoGlobalMap.set(topicInfo.id, topicInfo);
         topicInfo.children && topicInfo.children.forEach(child => {
           pushTopicData(child);
         })
@@ -172,13 +189,23 @@
     }
 
     /** @Listener */
-    onStagePressEnter() {
-      if (!this.map.selectionList.length) return;
-
+    onUserPressEnterOnTopic() {
       const newTopicId = generateUUID();
 
       this.addChildTopic({ newTopicInfo: { id: newTopicId } });
       this.setSingleSelection({ id: newTopicId });
+    }
+
+    /** @Listener */
+    onUserPressDeleteOnTopic() {
+      const { selectionList } = this.map;
+
+      if (selectionList.length === 1) {
+        const selectionInfo = extendedTopicInfoGlobalMap.get(selectionList[0]);
+        if (selectionInfo.type === TopicType.ROOT) return;
+      }
+
+      this.removeTopic();
     }
   }
 

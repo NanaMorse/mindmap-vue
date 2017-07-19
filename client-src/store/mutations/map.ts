@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { map } from 'client-src/constants/mutations'
 import { TopicType } from 'client-src/constants/common'
-import { deepCopy, generateUUID } from 'client-src/tools/helper'
+import { deepCopy, generateUUID, extendedTopicInfoGlobalMap } from 'client-src/tools/helper'
 import { stateInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interface'
 
 const topicTreeWalkHelper = new class {
@@ -24,7 +24,7 @@ const topicTreeWalkHelper = new class {
   /**
    * @description filter selection array
    * */
-  public getSelectionsArrayWithoutChild(topicTreeInfo: originTopicInfo, selectionList: Array<extendedTopicInfo>): Array<originTopicInfo> {
+  public filterTopicInfoListWithoutChild(topicTreeInfo: originTopicInfo, selectionList: Array<extendedTopicInfo>): Array<extendedTopicInfo> {
     const isAAncestorOfB = this.getAncestorCheckMethod(topicTreeInfo, selectionList);
 
     return selectionList.filter((selectionB) => {
@@ -77,7 +77,7 @@ const topicTreeWalkHelper = new class {
   /**
    * @description update the topic info in selection list and topic tree
    * */
-  public updateEverySelectionInfo(state: stateInfo, process: (selectionInfo: originTopicInfo) => any) {
+  public updateEverySelectionInfo(state: stateInfo, process: (topicInfo: originTopicInfo) => any) {
     const { topicTree, selectionList } = state.map;
 
     selectionList.forEach(id => {
@@ -87,7 +87,7 @@ const topicTreeWalkHelper = new class {
     });
   }
 
-  public updateSingleSelectionInfo(state: stateInfo, process: (selectionInfo: originTopicInfo) => any) {
+  public updateSingleSelectionInfo(state: stateInfo, process: (topicInfo: originTopicInfo) => any) {
     const { topicTree, selectionList } = state.map;
 
     const currentTargetTopicInfo = this.findTopicInfoById(topicTree, selectionList[selectionList.length - 1]);
@@ -151,7 +151,17 @@ const topicTreeEditMutations = {
    * @description remove topic, all selected topic will be removed
    * */
   [topicTreeEdit.removeTopic](state: stateInfo) {
+    const { topicTree, selectionList } = state.map;
 
+    const selectedTopicExtended = selectionList.map(id => extendedTopicInfoGlobalMap.get(id));
+    const finalTopicInfoListToRemove = topicTreeWalkHelper
+      .filterTopicInfoListWithoutChild(topicTree, selectedTopicExtended);
+
+    finalTopicInfoListToRemove.forEach(extendedTopicInfo => {
+      // find it's parent
+      const { children } = topicTreeWalkHelper.findTopicInfoById(topicTree, extendedTopicInfo.parentId);
+      children.splice(children.findIndex(topicInfo => topicInfo.id === extendedTopicInfo.id), 1);
+    });
   }
 };
 
