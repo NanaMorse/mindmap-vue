@@ -53,18 +53,6 @@
 
     @Mutation(topicTreeEdit.addChildTopic) addChildTopic;
 
-    created() {
-      const body = document.querySelector('body');
-
-      window.addEventListener('keyup', (e: KeyboardEvent) => {
-        switch (e.keyCode) {
-          case KeyCodeMap.ENTER: {
-            return this.onStagePressEnter();
-          }
-        }
-      })
-    }
-
     /**
      * @description get extended topic info list
      * @Computed
@@ -184,8 +172,8 @@
     }
 
     /** @Listener */
-    onStagePressEnter(e) {
-      if (!this.map.selectionList.length || !e) return;
+    onStagePressEnter() {
+      if (!this.map.selectionList.length) return;
 
       const newTopicId = generateUUID();
 

@@ -9,7 +9,9 @@
     </div>
     <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
     <input class="topic-title-editor" v-bind:style="topicTitleEditorStyle"
-           @keyup.enter.stop="onTitleEditorPressEnter"
+           @click.stop=""
+           @keyup.enter="onTitleEditorPressEnter"
+           @keyup.esc.stop="onTitleEditorPressESC"
            @blur="onTitleEditorBlur"/>
   </div>
 </template>
@@ -174,9 +176,18 @@
     }
 
     /** @Listener */
-    onTitleEditorPressEnter() {
+    onTitleEditorPressEnter(e: KeyboardEvent) {
       if (!this.isEditing) return;
+
+      e.stopPropagation();
       this.$titleEditor.blur();
+    }
+
+    /** @Listener */
+    onTitleEditorPressESC() {
+      if (!this.isEditing) return;
+      this.isEditing = false;
+      this.$titleEditor.value = '';
     }
 
     /** @Listener */
@@ -227,6 +238,13 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+
+    span {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
   }
 
   .topic-select-box {
