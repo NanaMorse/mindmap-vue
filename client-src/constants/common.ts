@@ -43,5 +43,7 @@ export const TopicTypeToDefaultTitleKeyMap = {
 
 /** @description keyCode */
 export const KeyCodeMap = {
-  ENTER: 13
+  ENTER: 13,
+  BACKSPACE: 8,
+  DELETE: 46
 };

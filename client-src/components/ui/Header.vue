@@ -53,12 +53,12 @@
     }
 
     /** @Helper */
-    isOnlySelectRootTopic() {
+    isOnlySelectRootTopic(): boolean {
       const { selectionList } = this.map;
       if (selectionList.length !== 1) return false;
 
-      console.log(extendedTopicInfoGlobalMap, selectionList[0], extendedTopicInfoGlobalMap.get(selectionList[0]))
-      // if (extendedTopicInfoGlobalMap.get(selectionList[0]).type === TopicType.ROOT) return true;
+      const currentSelectionTopicInfo = extendedTopicInfoGlobalMap.get(selectionList[0]);
+      return currentSelectionTopicInfo.type === TopicType.ROOT;
     }
   }
 
