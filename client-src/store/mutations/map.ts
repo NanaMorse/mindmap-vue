@@ -139,7 +139,9 @@ const topicTreeEditMutations = {
   /**
    * @description attach a new topic as current selection's child topic
    * */
-  [topicTreeEdit.addChildTopic](state: stateInfo, { newTopicInfo }: { newTopicInfo: originTopicInfo }) {
+  [topicTreeEdit.addChildTopic](state: stateInfo, { newTopicInfo }: { newTopicInfo?: originTopicInfo }) {
+    if (!newTopicInfo) throw new Error('addChildTopic需要提供newTopicInfo');
+
     topicTreeWalkHelper.updateSingleSelectionInfo(state, (targetTopicInfo) => {
       if (!targetTopicInfo.children) Vue.set(targetTopicInfo, 'children', []);
 

@@ -14,6 +14,7 @@
   "dependencies": {
     "koa": "^2.2.0",
     "koa-static": "^3.0.0",
+    "muse-ui": "^2.1.0",
     "vue": "^2.3.3",
     "vue-class-component": "^5.0.1",
     "vue-property-decorator": "^5.0.1",
@@ -30,6 +31,7 @@
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
     "sass-loader": "^6.0.5",
+    "style-loader": "^0.18.2",
     "ts-loader": "^2.0.3",
     "typescript": "^2.3.2",
     "vue-loader": "^12.1.0",

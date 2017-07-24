@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?uop1gb');
+  src:  url('../fonts/icomoon.eot?uop1gb#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?uop1gb') format('truetype'),
+    url('../fonts/icomoon.woff?uop1gb') format('woff'),
+    url('../fonts/icomoon.svg?uop1gb#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bold:before {
+  content: "\e900";
+  color: #94999e;
+}
+.icon-incline:before {
+  content: "\e901";
+  color: #94999e;
+}
+.icon-line-through:before {
+  content: "\e902";
+  color: #94999e;
+}
+.icon-text-center:before {
+  content: "\e903";
+  color: #94999e;
+}
+.icon-text-left:before {
+  content: "\e904";
+  color: #94999e;
+}
+.icon-text-right:before {
+  content: "\e905";
+  color: #5f666c;
+}
+.icon-underline:before {
+  content: "\e906";
+  color: #94999e;
+}
+.icon-icdelete:before {
+  content: "\e907";
+}
+.icon-icparenttopic:before {
+  content: "\e908";
+}
+.icon-child-topic:before {
+  content: "\e909";
+}
+.icon-topic-before:before {
+  content: "\e90a";
+}
+.icon-ictopicbefore:before {
+  content: "\e90b";
+}
+.icon-icboundary:before {
+  content: "\e90c";
+}
+.icon-icrelationship:before {
+  content: "\e90d";
+}
+.icon-icsummary:before {
+  content: "\e90e";
+}
+.icon-copy:before {
+  content: "\e90f";
+}
+.icon-paste:before {
+  content: "\e910";
+}
+.icon-edit:before {
+  content: "\e911";
+}
+.icon-ichyperlink:before {
+  content: "\e912";
+}
+.icon-icimage:before {
+  content: "\e913";
+}
+.icon-iclabel:before {
+  content: "\e914";
+}
+.icon-icformat:before {
+  content: "\e915";
+}
+.icon-icmarker:before {
+  content: "\e916";
+}
+.icon-icnote:before {
+  content: "\e917";
+}
+.icon-ictheme:before {
+  content: "\e918";
+}
