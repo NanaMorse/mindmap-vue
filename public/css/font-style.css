@@ -52,20 +52,20 @@
   content: "\e906";
   color: #94999e;
 }
-.icon-icdelete:before {
-  content: "\e907";
-}
-.icon-icparenttopic:before {
-  content: "\e908";
-}
 .icon-child-topic:before {
   content: "\e909";
+}
+.icon-parent-topic:before {
+  content: "\e908";
 }
 .icon-topic-before:before {
   content: "\e90a";
 }
-.icon-ictopicbefore:before {
+.icon-topic-after:before {
   content: "\e90b";
+}
+.icon-remove-topic:before {
+  content: "\e907";
 }
 .icon-icboundary:before {
   content: "\e90c";

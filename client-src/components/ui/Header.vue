@@ -1,10 +1,20 @@
 <template>
   <mu-appbar title="MindMap">
     <mu-icon-button icon=":icon-child-topic" slot="right" tooltip="add child topic"
-                    v-bind:disabled="shouldChildTopicIconDisabled"
-                    @click="onAddSubTopicIconClick"/>
+                    v-bind:disabled="isSelectionEmpty()"
+                    @click="addChildTopic"/>
+    <mu-icon-button icon=":icon-parent-topic" slot="right" tooltip="add parent topic"
+                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    @click="addParentTopic"/>
     <mu-icon-button icon=":icon-topic-before" slot="right" tooltip="add topic before"
-                    v-bind:disabled="shouldTopicBeforeIconDisabled"/>
+                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    @click="addTopicBefore"/>
+    <mu-icon-button icon=":icon-topic-after" slot="right" tooltip="add topic after"
+                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    @click="addTopicAfter"/>
+    <mu-icon-button icon=":icon-remove-topic" slot="right" tooltip="remove topic"
+                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    @click="removeTopic"/>
     <mu-icon-menu icon="more_vert" slot="right"></mu-icon-menu>
   </mu-appbar>
 </template>
@@ -18,34 +28,22 @@
   import { TopicType } from 'client-src/constants/common'
   import { extendedTopicInfoGlobalMap, generateUUID } from 'client-src/tools/helper'
 
-  const { selectionEdit, topicTreeEdit } = map;
+  const { topicTreeEdit } = map;
 
   @Component
   class Header extends Vue {
 
     @State('map') map: mapInfo;
 
-    @Mutation(selectionEdit.setSingleSelection) setSingleSelection;
-
     @Mutation(topicTreeEdit.addChildTopic) addChildTopic;
 
-    /** @Computed */
-    get shouldChildTopicIconDisabled(): boolean {
-      return this.isSelectionEmpty();
-    }
+    @Mutation(topicTreeEdit.addParentTopic) addParentTopic;
 
-    /** @Computed */
-    get shouldTopicBeforeIconDisabled(): boolean {
-      return this.isSelectionEmpty() || this.isOnlySelectRootTopic();
-    }
+    @Mutation(topicTreeEdit.addTopicBefore) addTopicBefore;
 
-    /** @Listener */
-    onAddSubTopicIconClick() {
-      const newTopicId = generateUUID();
+    @Mutation(topicTreeEdit.addTopicAfter) addTopicAfter;
 
-      this.addChildTopic({ newTopicInfo: { id: newTopicId } });
-      this.setSingleSelection({ id: newTopicId });
-    }
+    @Mutation(topicTreeEdit.removeTopic) removeTopic;
 
     /** @Helper */
     isSelectionEmpty(): boolean {
@@ -53,11 +51,11 @@
     }
 
     /** @Helper */
-    isOnlySelectRootTopic(): boolean {
+    isLatestSelectRootTopic(): boolean {
       const { selectionList } = this.map;
-      if (selectionList.length !== 1) return false;
+      if (!selectionList.length) return false;
 
-      const currentSelectionTopicInfo = extendedTopicInfoGlobalMap.get(selectionList[0]);
+      const currentSelectionTopicInfo = extendedTopicInfoGlobalMap.get(selectionList[selectionList.length - 1]);
       return currentSelectionTopicInfo.type === TopicType.ROOT;
     }
   }

@@ -46,8 +46,6 @@
 
     @State('map') map: mapInfo;
 
-    @Mutation(selectionEdit.setSingleSelection) setSingleSelection;
-
     @Mutation(selectionEdit.clearSelectionList) clearSelectionList;
 
     @Mutation(topicTreeEdit.addChildTopic) addChildTopic;
@@ -74,10 +72,7 @@
 
     /** @Listener */
     onUserPressEnterOnTopic() {
-      const newTopicId = generateUUID();
-
-      this.addChildTopic({ newTopicInfo: { id: newTopicId } });
-      this.setSingleSelection({ id: newTopicId });
+      this.addChildTopic();
     }
 
     /** @Listener */

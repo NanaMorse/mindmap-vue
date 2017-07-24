@@ -6,6 +6,11 @@ import { stateInfo, originTopicInfo, extendedTopicInfo } from 'client-src/interf
 
 const topicTreeWalkHelper = new class {
 
+  public parseNewTopicInfo(newTopicInfo?: originTopicInfo) {
+    if (!newTopicInfo) newTopicInfo = { id: generateUUID() };
+    return { topicInfo: newTopicInfo, id: newTopicInfo.id };
+  }
+
   /**
    * @param topicTreeToSearch the search area to find target topic
    * @param targetId search target's uuid
@@ -139,14 +144,59 @@ const topicTreeEditMutations = {
   /**
    * @description attach a new topic as current selection's child topic
    * */
-  [topicTreeEdit.addChildTopic](state: stateInfo, { newTopicInfo }: { newTopicInfo?: originTopicInfo }) {
-    if (!newTopicInfo) throw new Error('addChildTopic需要提供newTopicInfo');
+  [topicTreeEdit.addChildTopic](state: stateInfo, { newTopicInfo }: { newTopicInfo?: originTopicInfo } = {}) {
+    const { topicInfo, id } = topicTreeWalkHelper.parseNewTopicInfo(newTopicInfo);
 
     topicTreeWalkHelper.updateSingleSelectionInfo(state, (targetTopicInfo) => {
       if (!targetTopicInfo.children) Vue.set(targetTopicInfo, 'children', []);
 
-      targetTopicInfo.children.push(newTopicInfo);
+      targetTopicInfo.children.push(topicInfo);
     });
+
+    state.map.selectionList = [id];
+  },
+
+  [topicTreeEdit.addParentTopic](state: stateInfo) {
+    const { topicInfo, id } = topicTreeWalkHelper.parseNewTopicInfo();
+
+    topicTreeWalkHelper.updateSingleSelectionInfo(state, (targetTopicInfo) => {
+      const { parentId, index } = extendedTopicInfoGlobalMap.get(targetTopicInfo.id);
+      const originParentTopicInfo = topicTreeWalkHelper.findTopicInfoById(state.map.topicTree, parentId);
+
+      topicInfo.children = [targetTopicInfo];
+      originParentTopicInfo.children.splice(index, 1, topicInfo);
+    });
+
+    state.map.selectionList = [id];
+  },
+
+  /**
+   * @description attach a new topic at current selection's index before
+   * */
+  [topicTreeEdit.addTopicBefore](state: stateInfo, { newTopicInfo }: { newTopicInfo?: originTopicInfo } = {}) {
+    const { topicInfo, id } = topicTreeWalkHelper.parseNewTopicInfo(newTopicInfo);
+
+    topicTreeWalkHelper.updateSingleSelectionInfo(state, (targetTopicInfo) => {
+      const { parentId, index } = extendedTopicInfoGlobalMap.get(targetTopicInfo.id);
+      const targetParentTopicInfo = topicTreeWalkHelper.findTopicInfoById(state.map.topicTree, parentId);
+
+      targetParentTopicInfo.children.splice(index, 0, topicInfo);
+    });
+
+    state.map.selectionList = [id];
+  },
+
+  [topicTreeEdit.addTopicAfter](state: stateInfo, { newTopicInfo }: { newTopicInfo?: originTopicInfo } = {}) {
+    const { topicInfo, id } = topicTreeWalkHelper.parseNewTopicInfo(newTopicInfo);
+
+    topicTreeWalkHelper.updateSingleSelectionInfo(state, (targetTopicInfo) => {
+      const { parentId, index } = extendedTopicInfoGlobalMap.get(targetTopicInfo.id);
+      const targetParentTopicInfo = topicTreeWalkHelper.findTopicInfoById(state.map.topicTree, parentId);
+
+      targetParentTopicInfo.children.splice(index + 1, 0, topicInfo);
+    });
+
+    state.map.selectionList = [id];
   },
 
   /**

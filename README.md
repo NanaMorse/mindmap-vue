@@ -12,7 +12,14 @@ A simple mindmap web application based on Vue.js.
 ### Topic结构编辑 / Edit Topic Structure
 
 * 添加子Topic / Add Child Topic
-* 删除Topic / Delete Topic 
+
+* 插入父Topic / Add Parent Topic
+
+* 同列向前插入Topic / Add Topic Before
+
+* 同列向后插入Topic ／ Add Topic After
+
+* 删除Topic / Remove Topic
 
 ### Topic内容与内容样式编辑 / Edit Topic Content
 
