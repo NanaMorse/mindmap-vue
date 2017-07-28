@@ -1,5 +1,5 @@
 <template>
-  <mu-appbar title="MindMap">
+  <mu-appbar class="app-header" title="MindMap">
     <mu-icon-button icon=":icon-child-topic" slot="right" tooltip="add child topic"
                     v-bind:disabled="isSelectionEmpty()"
                     @click="addChildTopic"/>
@@ -65,5 +65,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .app-header {
+    position: absolute;
+  }
 </style>

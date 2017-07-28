@@ -1,18 +1,19 @@
 <template>
   <div class="stage"
-       v-on:click="onStageClick">
-    <div class="topics-container">
+       @click="onStageClick">
+    <div class="topics-container" v-bind:style="canvasStyle"
+         @wheel.prevent.stop="onTopicContainerWheel">
+      <svg class="lines-container" v-bind:style="canvasStyle">
+        <connect-line v-for="topicInfo in extendedTopicInfoList"
+                      v-if="topicInfo.children && topicInfo.children.length"
+                      :key="topicInfo.id"
+                      v-bind:topicInfo="topicInfo"
+                      v-bind:mapStructure="map.mapStructure"/>
+      </svg>
       <topic v-for="topicInfo in extendedTopicInfoList"
              :key="topicInfo.id"
              v-bind:topicInfo="topicInfo"/>
     </div>
-    <svg class="lines-container">
-      <connect-line v-for="topicInfo in extendedTopicInfoList"
-            v-if="topicInfo.children && topicInfo.children.length"
-            :key="topicInfo.id"
-            v-bind:topicInfo="topicInfo"
-            v-bind:mapStructure="map.mapStructure"/>
-    </svg>
   </div>
 </template>
 
@@ -21,12 +22,13 @@
    * @fileOverview layout all topics
    * */
   import Vue from 'vue'
-  import { Component, Prop } from 'vue-property-decorator'
+  import { Component, Prop, Watch } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
   import Topic from './Topic.vue'
   import Line from './Line.vue'
   import { generateUUID, extendedTopicInfoGlobalMap } from 'client-src/tools/helper'
   import { TopicType, KeyCodeMap } from 'client-src/constants/common'
+  import { canvasSize } from 'client-src/constants/defaultstyle'
   import { map } from 'client-src/constants/mutations'
   import { mapInfo, extendedTopicInfo } from 'client-src/interface'
 
@@ -40,6 +42,8 @@
   })
 
   class Stage extends Vue {
+
+    $el;
 
     @Prop()
     extendedTopicInfoList: Array<extendedTopicInfo>;
@@ -63,11 +67,34 @@
           case KeyCodeMap.DELETE: return this.onUserPressDeleteOnTopic();
         }
       });
+
+      this.setStageScrollOffset();
+    }
+
+    /** @Data */
+    stageScrollPosition = { left: canvasSize.width / 2, top: canvasSize.height / 2 };
+
+    /** @Computed */
+    get canvasStyle() {
+      const sizeStyle = {
+        width: `${canvasSize.width}px`,
+        height: `${canvasSize.height}px`
+      };
+
+      return [sizeStyle];
     }
 
     /** @Listener */
     onStageClick() {
       this.map.selectionList.length && this.clearSelectionList();
+    }
+
+    /** @Listener */
+    onTopicContainerWheel(e: WheelEvent) {
+      const { deltaX, deltaY } = e;
+      const { left, top } = this.stageScrollPosition;
+
+      this.stageScrollPosition = { left: left + deltaX, top: top + deltaY };
     }
 
     /** @Listener */
@@ -86,6 +113,16 @@
 
       this.removeTopic();
     }
+
+    @Watch('stageScrollPosition')
+    setStageScrollOffset() {
+      const { left, top } = this.stageScrollPosition;
+
+      const { clientWidth, clientHeight } = document.body;
+
+      this.$el.scrollLeft = left - clientWidth / 2;
+      this.$el.scrollTop = top - (clientHeight - 64) / 2;
+    }
   }
 
   export default Stage
@@ -96,6 +133,7 @@
   .stage {
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
   }
 
   .topics-container {
@@ -104,7 +142,5 @@
 
   .lines-container {
     display: block;
-    width: 100%;
-    height: 100%;
   }
 </style>

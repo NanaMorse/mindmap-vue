@@ -107,4 +107,6 @@ export const TopicMargin = {
 export const EditReceiverMinWidth = 200;
 export const EditReceiverHeight = 20;
 
+export const canvasSize = { width: 10000, height: 6000 };
+
 export const DefaultMapStructure = MapStructureType.LOGIC_TO_RIGHT;

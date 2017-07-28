@@ -132,8 +132,6 @@
         zIndex: this.isEditing ? 1 : -1
       };
 
-      if (!this.isEditing) return [displayStyle];
-
       const { shapeSize, position } = this.topicInfo;
 
       const width = Math.max(shapeSize.width + 60, EditReceiverMinWidth);
@@ -148,7 +146,7 @@
         top: `${position[1] - EditReceiverHeight / 2}px`
       };
 
-      return [sizeStyle, positionStyle];
+      return [displayStyle, sizeStyle, positionStyle];
     }
 
     /** @Listener */
@@ -164,8 +162,6 @@
     /** @Listener */
     onTopicClick(e: MouseEvent) {
       this.updateSelection(e);
-
-      this.$titleEditor.focus();
     }
 
     /** @Listener */
