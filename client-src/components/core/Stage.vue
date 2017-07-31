@@ -34,6 +34,8 @@
 
   const { selectionEdit, topicTreeEdit } = map;
 
+  const moveLimitDistance = 100;
+
   @Component({
     components: {
       'topic': Topic,
@@ -71,6 +73,12 @@
       this.setStageScrollOffset();
     }
 
+    /** @Static */
+    startScrollPosition = {
+      left: canvasSize.width / 2 - document.body.clientWidth / 2,
+      top: canvasSize.height / 2 - (document.body.clientHeight - 64) / 2
+    };
+
     /** @Data */
     stageScrollPosition = { left: canvasSize.width / 2, top: canvasSize.height / 2 };
 
@@ -91,8 +99,9 @@
 
     /** @Listener */
     onTopicContainerWheel(e: WheelEvent) {
-      const { deltaX, deltaY } = e;
       const { left, top } = this.stageScrollPosition;
+
+      const { deltaX, deltaY } = this.fixScrollDelta(e.deltaX, e.deltaY);
 
       this.stageScrollPosition = { left: left + deltaX, top: top + deltaY };
     }
@@ -118,10 +127,32 @@
     setStageScrollOffset() {
       const { left, top } = this.stageScrollPosition;
 
-      const { clientWidth, clientHeight } = document.body;
+      this.$el.scrollLeft = left - document.body.clientWidth / 2;
+      this.$el.scrollTop = top - (document.body.clientHeight - 64) / 2;
+    }
 
-      this.$el.scrollLeft = left - clientWidth / 2;
-      this.$el.scrollTop = top - (clientHeight - 64) / 2;
+    /** @Helper */
+    fixScrollDelta(deltaX: number, deltaY: number) {
+      const { startScrollPosition, stageScrollPosition } = this;
+      const { clientWidth, clientHeight } = document.body;
+      const { shapeSize, treeSize, position } = this.extendedTopicInfoList[0];
+
+
+
+//      // 左边超出边界
+//      const leftBoundary = startScrollPosition.left +
+//        clientWidth / 2 + treeSize.width - moveLimitDistance - shapeSize.width / 2;
+//      if ( deltaX > 0 && (stageScrollPosition.left + deltaX > leftBoundary) ) {
+//        deltaX = leftBoundary - stageScrollPosition.left;
+//      }
+//
+//      const rightBoundary = startScrollPosition.left -
+//        clientWidth / 2;
+//      if (deltaX < 0 && (stageScrollPosition.left + deltaX < rightBoundary)) {
+//        deltaX = rightBoundary - stageScrollPosition.left;
+//      }
+
+      return { deltaX, deltaY }
     }
   }
 
