@@ -34,6 +34,7 @@
 
   const { selectionEdit, topicTreeEdit } = map;
 
+  const headerHeight = 64;
   const moveLimitDistance = 100;
 
   @Component({
@@ -73,14 +74,11 @@
       this.setStageScrollOffset();
     }
 
-    /** @Static */
-    startScrollPosition = {
-      left: canvasSize.width / 2 - document.body.clientWidth / 2,
-      top: canvasSize.height / 2 - (document.body.clientHeight - 64) / 2
-    };
-
     /** @Data */
-    stageScrollPosition = { left: canvasSize.width / 2, top: canvasSize.height / 2 };
+    stageScrollPosition = {
+      left: canvasSize.width / 2 - document.body.clientWidth / 2,
+      top: canvasSize.height / 2 - (document.body.clientHeight - headerHeight) / 2
+    };
 
     /** @Computed */
     get canvasStyle() {
@@ -127,30 +125,39 @@
     setStageScrollOffset() {
       const { left, top } = this.stageScrollPosition;
 
-      this.$el.scrollLeft = left - document.body.clientWidth / 2;
-      this.$el.scrollTop = top - (document.body.clientHeight - 64) / 2;
+      this.$el.scrollLeft = left;
+      this.$el.scrollTop = top;
     }
 
     /** @Helper */
     fixScrollDelta(deltaX: number, deltaY: number) {
-      const { startScrollPosition, stageScrollPosition } = this;
+      const { left, top } = this.stageScrollPosition;
       const { clientWidth, clientHeight } = document.body;
-      const { shapeSize, treeSize, position } = this.extendedTopicInfoList[0];
+      const { boundingRect } = this.extendedTopicInfoList[0];
 
+      // 左边超出边界
+      const leftBoundary = boundingRect.x2 - moveLimitDistance;
+      if (deltaX > 0 && (left + deltaX > leftBoundary)) {
+        deltaX = leftBoundary - left;
+      }
 
+      // 右边超出边界
+      const rightBoundary = boundingRect.x1 - clientWidth + moveLimitDistance;
+      if (deltaX < 0 && (left + deltaX < rightBoundary)) {
+        deltaX = rightBoundary - left;
+      }
 
-//      // 左边超出边界
-//      const leftBoundary = startScrollPosition.left +
-//        clientWidth / 2 + treeSize.width - moveLimitDistance - shapeSize.width / 2;
-//      if ( deltaX > 0 && (stageScrollPosition.left + deltaX > leftBoundary) ) {
-//        deltaX = leftBoundary - stageScrollPosition.left;
-//      }
-//
-//      const rightBoundary = startScrollPosition.left -
-//        clientWidth / 2;
-//      if (deltaX < 0 && (stageScrollPosition.left + deltaX < rightBoundary)) {
-//        deltaX = rightBoundary - stageScrollPosition.left;
-//      }
+      // 上边超出边界
+      const topBoundary = boundingRect.y2 - moveLimitDistance - headerHeight;
+      if (deltaY > 0 && (top + deltaY > topBoundary)) {
+        deltaY = topBoundary - top;
+      }
+
+      // 下边超出边界
+      const bottomBoundary = boundingRect.y1 - clientHeight + moveLimitDistance;
+      if (deltaY < 0 && (top + deltaY < bottomBoundary)) {
+        deltaY = bottomBoundary - top;
+      }
 
       return { deltaX, deltaY }
     }

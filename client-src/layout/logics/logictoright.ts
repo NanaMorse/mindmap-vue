@@ -6,11 +6,21 @@ const { LOGIC_TO_RIGHT } = MapStructureType;
 
 const { marginHorizon, marginVertical } = TopicMargin[LOGIC_TO_RIGHT];
 
-class LogicToRight implements LayoutProcess{
+class LogicToRight implements LayoutProcess {
+
+  private x1: number;
+
+  private y1: number;
+
+  private x2: number;
+
+  private y2: number;
 
   public startLayout(topicInfo: extendedTopicInfo) {
+    this.initBoundingRect(topicInfo.position, topicInfo.shapeSize);
     this.calcTreeSize(topicInfo);
     this.calcPosition(topicInfo);
+    topicInfo.boundingRect = { x1: this.x1, y1: this.y1, x2: this.x2, y2: this.y2 };
   }
 
   private calcTreeSize(topicInfo: extendedTopicInfo) {
@@ -56,10 +66,26 @@ class LogicToRight implements LayoutProcess{
 
       childTree.position = [x, y];
 
+      this.updateBoundingRect(childTree.position, currentChildShapeSize);
+
       childrenTopStart += currentChildTreeSize.height + marginVertical * 2;
 
       this.calcPosition(childTree);
     });
+  }
+
+  private initBoundingRect([ x, y ]: [ number, number ], { width, height }: { width: number, height: number }) {
+    this.x1 = x - width / 2;
+    this.y1 = y - height / 2;
+    this.x2 = x + width / 2;
+    this.y2 = y + height / 2;
+  }
+
+  private updateBoundingRect([ x, y ]: [ number, number ], { width, height }: { width: number, height: number }) {
+    this.x1 = Math.min(this.x1, x - width / 2);
+    this.y1 = Math.min(this.y1, y - height / 2);
+    this.x2 = Math.max(this.x2, x + width / 2);
+    this.y2 = Math.max(this.y2, y + height / 2);
   }
 }
 

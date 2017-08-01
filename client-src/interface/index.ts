@@ -44,6 +44,8 @@ export interface extendedTopicInfo extends originTopicInfo {
 
   position: [number, number]
 
+  boundingRect?: { x1: number, y1: number, x2: number, y2: number }
+
   children?: Array<extendedTopicInfo>
 }
 
