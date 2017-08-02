@@ -50,9 +50,14 @@ export interface extendedTopicInfo extends originTopicInfo {
 }
 
 export interface stateInfo {
-  app: {}
+  app: appInfo
   map: mapInfo
   stage: stageInfo
+}
+
+export interface appInfo {
+  hasUndo: boolean
+  hasRedo: boolean
 }
 
 export interface stageInfo {

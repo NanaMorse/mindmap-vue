@@ -1,5 +1,11 @@
 <template>
   <mu-appbar class="app-header" title="MindMap">
+    <mu-icon-button icon="undo" slot="right" tooltip="undo"
+                    v-bind:disabled="!app.hasUndo"
+                    @click="invokeUndo"/>
+    <mu-icon-button icon="redo" slot="right" tooltip="redo"
+                    v-bind:disabled="!app.hasRedo"
+                    @click="invokeRedo"/>
     <mu-icon-button icon=":icon-child-topic" slot="right" tooltip="add child topic"
                     v-bind:disabled="isSelectionEmpty()"
                     @click="addChildTopic"/>
@@ -23,15 +29,18 @@
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
-  import { map } from 'client-src/constants/mutations'
-  import { mapInfo } from 'client-src/interface'
+  import { map, undo } from 'client-src/constants/mutations'
+  import { mapInfo, appInfo } from 'client-src/interface'
   import { TopicType } from 'client-src/constants/common'
   import { extendedTopicInfoGlobalMap, generateUUID } from 'client-src/tools/helper'
 
   const { topicTreeEdit } = map;
+  const { invokeUndo, invokeRedo } = undo;
 
   @Component
   class Header extends Vue {
+
+    @State('app') app: appInfo;
 
     @State('map') map: mapInfo;
 
@@ -44,6 +53,10 @@
     @Mutation(topicTreeEdit.addTopicAfter) addTopicAfter;
 
     @Mutation(topicTreeEdit.removeTopic) removeTopic;
+
+    @Mutation(invokeUndo) invokeUndo;
+
+    @Mutation(invokeRedo) invokeRedo;
 
     /** @Helper */
     isSelectionEmpty(): boolean {

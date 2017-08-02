@@ -1,3 +1,8 @@
+export const undo = {
+  invokeUndo: 'invokeUndo',
+  invokeRedo: 'invokeRedo',
+  updateUndoStatus: 'updateUndoStatus'
+};
 
 export const map = {
 

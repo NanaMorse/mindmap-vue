@@ -29,10 +29,11 @@
   import { generateUUID, extendedTopicInfoGlobalMap } from 'client-src/tools/helper'
   import { TopicType, KeyCodeMap } from 'client-src/constants/common'
   import { canvasSize } from 'client-src/constants/defaultstyle'
-  import { map } from 'client-src/constants/mutations'
+  import { map, undo } from 'client-src/constants/mutations'
   import { mapInfo, extendedTopicInfo } from 'client-src/interface'
 
   const { selectionEdit, topicTreeEdit } = map;
+  const { invokeUndo, invokeRedo } = undo;
 
   const headerHeight = 64;
   const moveLimitDistance = 100;
@@ -59,9 +60,17 @@
 
     @Mutation(topicTreeEdit.removeTopic) removeTopic;
 
+    @Mutation(invokeUndo) invokeUndo;
+
+    @Mutation(invokeRedo) invokeRedo;
+
     /** @LifeCircle */
     mounted() {
-      window.addEventListener('keyup', (e: KeyboardEvent) => {
+      window.addEventListener('keydown', (e: KeyboardEvent) => {
+        switch (e.keyCode) {
+          case KeyCodeMap.Z: return this.onInvokeUndoOrRedo(e);
+        }
+
         if (!this.map.selectionList.length) return;
 
         switch (e.keyCode) {
@@ -119,6 +128,13 @@
       }
 
       this.removeTopic();
+    }
+
+    /** @Listener */
+    onInvokeUndoOrRedo(e: KeyboardEvent) {
+      if (e.metaKey) {
+        e.shiftKey ?  this.invokeRedo() : this.invokeUndo();
+      }
     }
 
     @Watch('stageScrollPosition')

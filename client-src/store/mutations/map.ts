@@ -214,6 +214,8 @@ const topicTreeEditMutations = {
       const { children } = topicTreeWalkHelper.findTopicInfoById(topicTree, extendedTopicInfo.parentId);
       children.splice(children.findIndex(topicInfo => topicInfo.id === extendedTopicInfo.id), 1);
     });
+
+    selectionList.splice(0);
   }
 };
 
