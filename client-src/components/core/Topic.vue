@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="topic" v-bind:style="topicStyle"
+    <div class="topic" v-bind:style="shapeStyle"
          @mouseover="onTopicMouseOver"
          @mouseout="onTopicMouseOut"
          @click.stop="onTopicClick"
          @dblclick.stop="onTopicDoubleClick">
-      <span>{{ topicTitle }}</span>
+      <span v-bind:style="titleStyle">{{ topicTitle }}</span>
     </div>
     <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
     <input class="topic-title-editor" v-bind:style="topicTitleEditorStyle"
            @click.stop=""
-           @keyup.enter="onTitleEditorPressEnter"
-           @keyup.esc.stop="onTitleEditorPressESC"
+           @keydown.enter="onTitleEditorPressEnter"
+           @keydown.esc.stop="onTitleEditorPressESC"
            @blur="onTitleEditorBlur"/>
   </div>
 </template>
@@ -53,6 +53,8 @@
     /** @LifeCircle */
     mounted() {
       this.$titleEditor = this.$el.querySelector('.topic-title-editor') as HTMLInputElement;
+
+      this.$titleEditor.addEventListener('keydown', (e: KeyboardEvent) => e.stopPropagation())
     }
 
     /** @Data */
@@ -67,7 +69,7 @@
     }
 
     /** @Computed */
-    get topicStyle() {
+    get shapeStyle() {
       const { shapeSize, style, position } = this.topicInfo;
 
       const sizeStyle = {
@@ -85,6 +87,15 @@
       };
 
       return [sizeStyle, borderStyle, positionStyle];
+    }
+
+    /** @Computed */
+    get titleStyle() {
+      const { style } = this.topicInfo;
+
+      return {
+        fontFamily: style.fontFamily
+      }
     }
 
     /** @Computed */
@@ -173,15 +184,12 @@
 
     /** @Listener */
     onTitleEditorPressEnter(e: KeyboardEvent) {
-      if (!this.isEditing) return;
-
       e.stopPropagation();
       this.$titleEditor.blur();
     }
 
     /** @Listener */
     onTitleEditorPressESC() {
-      if (!this.isEditing) return;
       this.isEditing = false;
       this.$titleEditor.value = '';
     }

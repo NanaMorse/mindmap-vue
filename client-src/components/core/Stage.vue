@@ -66,7 +66,7 @@
 
     /** @LifeCircle */
     mounted() {
-      window.addEventListener('keydown', (e: KeyboardEvent) => {
+      document.body.addEventListener('keydown', (e: KeyboardEvent) => {
         switch (e.keyCode) {
           case KeyCodeMap.Z: return this.onInvokeUndoOrRedo(e);
         }

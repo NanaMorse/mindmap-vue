@@ -24,3 +24,7 @@ A simple mindmap web application based on Vue.js.
 ### Topic内容与内容样式编辑 / Edit Topic Content
 
 * 编辑Topic文本 / Edit Topic Content Text
+
+### 其它 / Others
+
+* Undo and Redo

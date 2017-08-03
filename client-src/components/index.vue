@@ -131,9 +131,9 @@
 
     /** @helper */
     setTopicShapeSizeInfo(topicInfo: extendedTopicInfo) {
-      const { type, title, style: { fontSize, shapeType } } = topicInfo;
+      const { type, title, style: { fontSize, shapeType, fontFamily } } = topicInfo;
       const defaultTitle = i18n(TopicTypeToDefaultTitleKeyMap[type]);
-      const topicTitleSize = getTextSize(title || defaultTitle, fontSize);
+      const topicTitleSize = getTextSize(title || defaultTitle, fontSize, fontFamily);
 
       const shapeSize = { width: 0, height: 0 };
       const { paddingVertical, paddingHorizon } = TopicPaddingOverride[type][shapeType];

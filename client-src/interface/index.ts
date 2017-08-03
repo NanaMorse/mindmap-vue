@@ -9,6 +9,7 @@ export interface topicStyle {
 
   fontSize?: number
   fontColor?: string
+  fontFamily?: string,
 
   borderWidth?: number
   borderColor?: string

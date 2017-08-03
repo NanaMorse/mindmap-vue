@@ -20,10 +20,12 @@ export const getTextSize = (() => {
 
   document.querySelector('#app-tools-container').appendChild(p);
 
-  return (text, fontSize: number | string) => {
+  return (text, fontSize: number | string, fontFamily: string) => {
     if (typeof fontSize === 'number') {
       fontSize = fontSize + 'px';
     }
+
+    p.style.fontFamily = fontFamily;
     p.style.fontSize = fontSize;
     p.innerText = text;
 
