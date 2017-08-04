@@ -1,18 +1,18 @@
 <template>
   <div class="stage"
        @click="onStageClick">
-    <div class="topics-container" v-bind:style="canvasStyle"
+    <div class="topics-container" :style="canvasStyle"
          @wheel.prevent.stop="onTopicContainerWheel">
-      <svg class="lines-container" v-bind:style="canvasStyle">
+      <svg class="lines-container" :style="canvasStyle">
         <connect-line v-for="topicInfo in extendedTopicInfoList"
                       v-if="topicInfo.children && topicInfo.children.length"
                       :key="topicInfo.id"
-                      v-bind:topicInfo="topicInfo"
-                      v-bind:mapStructure="map.mapStructure"/>
+                      :topicInfo="topicInfo"
+                      :mapStructure="map.mapStructure"/>
       </svg>
       <topic v-for="topicInfo in extendedTopicInfoList"
              :key="topicInfo.id"
-             v-bind:topicInfo="topicInfo"/>
+             :topicInfo="topicInfo"/>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ui-header />
-    <core-stage v-bind:extendedTopicInfoList="extendedTopicInfoList" />
+    <ui />
+    <core :extendedTopicInfoList="extendedTopicInfoList" />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
   import Vue from 'vue'
   import { Component, Prop } from 'vue-property-decorator'
   import { State } from 'vuex-class'
-  import Header from './ui/Header.vue'
+  import UI from './ui'
   import Stage from './core/Stage'
   import LayoutTopics from 'client-src/layout'
   import { defaultTitle, i18n } from 'client-src/constants/i18n'
@@ -20,8 +20,8 @@
 
   @Component({
     components: {
-      'core-stage': Stage,
-      'ui-header': Header
+      'core': Stage,
+      'ui': UI
     }
   })
   class MindMap extends Vue {
@@ -147,7 +147,3 @@
 
   export default MindMap;
 </script>
-
-<style lang="scss" scoped>
-
-</style>

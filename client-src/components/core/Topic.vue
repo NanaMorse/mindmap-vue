@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="topic" v-bind:style="shapeStyle"
+    <div class="topic" :style="shapeStyle"
          @mouseover="onTopicMouseOver"
          @mouseout="onTopicMouseOut"
          @click.stop="onTopicClick"
          @dblclick.stop="onTopicDoubleClick">
-      <span v-bind:style="titleStyle">{{ topicTitle }}</span>
+      <span :style="titleStyle">{{ topicTitle }}</span>
     </div>
-    <div class="topic-select-box" v-bind:style="topicSelectBoxStyle"></div>
-    <input class="topic-title-editor" v-bind:style="topicTitleEditorStyle"
+    <div class="topic-select-box" :style="topicSelectBoxStyle"></div>
+    <input class="topic-title-editor" :style="topicTitleEditorStyle"
            @click.stop=""
-           @keydown.enter="onTitleEditorPressEnter"
+           @keydown.enter.stop="onTitleEditorPressEnter"
            @keydown.esc.stop="onTitleEditorPressESC"
            @blur="onTitleEditorBlur"/>
   </div>
@@ -183,8 +183,7 @@
     }
 
     /** @Listener */
-    onTitleEditorPressEnter(e: KeyboardEvent) {
-      e.stopPropagation();
+    onTitleEditorPressEnter() {
       this.$titleEditor.blur();
     }
 

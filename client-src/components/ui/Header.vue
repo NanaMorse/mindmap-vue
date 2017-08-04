@@ -1,33 +1,33 @@
 <template>
   <mu-appbar class="app-header" title="MindMap">
     <mu-icon-button icon="undo" slot="right" tooltip="undo"
-                    v-bind:disabled="!app.hasUndo"
+                    :disabled="!app.hasUndo"
                     @click="invokeUndo"/>
     <mu-icon-button icon="redo" slot="right" tooltip="redo"
-                    v-bind:disabled="!app.hasRedo"
+                    :disabled="!app.hasRedo"
                     @click="invokeRedo"/>
     <mu-icon-button icon=":icon-child-topic" slot="right" tooltip="add child topic"
-                    v-bind:disabled="isSelectionEmpty()"
+                    :disabled="isSelectionEmpty()"
                     @click="addChildTopic"/>
     <mu-icon-button icon=":icon-parent-topic" slot="right" tooltip="add parent topic"
-                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    :disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
                     @click="addParentTopic"/>
     <mu-icon-button icon=":icon-topic-before" slot="right" tooltip="add topic before"
-                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    :disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
                     @click="addTopicBefore"/>
     <mu-icon-button icon=":icon-topic-after" slot="right" tooltip="add topic after"
-                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    :disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
                     @click="addTopicAfter"/>
     <mu-icon-button icon=":icon-remove-topic" slot="right" tooltip="remove topic"
-                    v-bind:disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
+                    :disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
                     @click="removeTopic"/>
-    <mu-icon-menu icon="more_vert" slot="right"></mu-icon-menu>
+    <mu-icon-button icon="style" slot="right" @click="onToggleSidePanelDisplay" />
   </mu-appbar>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component } from 'vue-property-decorator'
+  import { Component, Prop } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
   import { map, undo } from 'client-src/constants/mutations'
   import { mapInfo, appInfo } from 'client-src/interface'
@@ -39,6 +39,9 @@
 
   @Component
   class Header extends Vue {
+
+    @Prop()
+    onToggleSidePanelDisplay: Function;
 
     @State('app') app: appInfo;
 

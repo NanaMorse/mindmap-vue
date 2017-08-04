@@ -1,5 +1,5 @@
 <template>
-  <path v-bind:d="linePath" v-bind:style="lineStyle"/>
+  <path :d="linePath" :style="lineStyle"/>
 </template>
 
 <script lang="ts">
