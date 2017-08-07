@@ -1,5 +1,5 @@
 <template>
-  <div class="side-panel" :class="{ 'show': show }">
+  <div class="side-panel" :class="{ 'show': showSidePanel }">
 
   </div>
 </template>
@@ -7,12 +7,18 @@
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator'
+  import { State, Mutation } from 'vuex-class'
+  import { appInfo } from 'client-src/interface'
 
   @Component
   class SidePanel extends Vue {
 
-    @Prop()
-    show: boolean;
+    @State('app') app: appInfo;
+
+    /** @Computed */
+    get showSidePanel(): boolean {
+      return this.app.showSidePanel;
+    }
 
   }
 

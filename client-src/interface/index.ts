@@ -59,6 +59,7 @@ export interface stateInfo {
 export interface appInfo {
   hasUndo: boolean
   hasRedo: boolean
+  showSidePanel: boolean
 }
 
 export interface stageInfo {

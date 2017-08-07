@@ -4,6 +4,10 @@ export const undo = {
   updateUndoStatus: 'updateUndoStatus'
 };
 
+export const app = {
+  toggleSidePanel: 'toggleSidePanel'
+};
+
 export const map = {
 
   selectionEdit: {

@@ -21,7 +21,7 @@
     <mu-icon-button icon=":icon-remove-topic" slot="right" tooltip="remove topic"
                     :disabled="isSelectionEmpty() || isLatestSelectRootTopic()"
                     @click="removeTopic"/>
-    <mu-icon-button icon="style" slot="right" @click="onToggleSidePanelDisplay" />
+    <mu-icon-button icon="style" slot="right" @click="toggleSidePanel" />
   </mu-appbar>
 </template>
 
@@ -29,19 +29,17 @@
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
-  import { map, undo } from 'client-src/constants/mutations'
+  import { map, undo, app } from 'client-src/constants/mutations'
   import { mapInfo, appInfo } from 'client-src/interface'
   import { TopicType } from 'client-src/constants/common'
   import { extendedTopicInfoGlobalMap, generateUUID } from 'client-src/tools/helper'
 
   const { topicTreeEdit } = map;
   const { invokeUndo, invokeRedo } = undo;
+  const { toggleSidePanel } = app;
 
   @Component
   class Header extends Vue {
-
-    @Prop()
-    onToggleSidePanelDisplay: Function;
 
     @State('app') app: appInfo;
 
@@ -60,6 +58,8 @@
     @Mutation(invokeUndo) invokeUndo;
 
     @Mutation(invokeRedo) invokeRedo;
+
+    @Mutation(toggleSidePanel) toggleSidePanel;
 
     /** @Helper */
     isSelectionEmpty(): boolean {

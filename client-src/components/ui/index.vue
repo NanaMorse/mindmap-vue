@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ui-header :onToggleSidePanelDisplay="onToggleSidePanelDisplay.bind(this)"/>
-    <ui-side-panel :show="sidePanelShown"/>
+    <ui-header/>
+    <ui-side-panel/>
   </div>
 </template>
 
@@ -17,15 +17,7 @@
       'ui-side-panel': SidePanel
     }
   })
-  class UI extends Vue {
-    /** @Data */
-    sidePanelShown: boolean = false;
-
-    /** @Helper */
-    onToggleSidePanelDisplay() {
-      this.sidePanelShown = !this.sidePanelShown;
-    }
-  }
+  class UI extends Vue {}
 
   export default UI
 </script>

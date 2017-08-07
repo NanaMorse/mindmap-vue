@@ -6,6 +6,8 @@ import { undoPlugin, undoPluginMutations } from './plugins/undo'
 
 Vue.use(Vuex);
 
+(<any>State).app.showSidePanel = false;
+
 export default new Vuex.Store({
   state: State as any,
   plugins: [undoPlugin],

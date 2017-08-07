@@ -1,5 +1,5 @@
 import { Store } from 'vuex'
-import { map, undo } from 'client-src/constants/mutations'
+import { map, undo, app } from 'client-src/constants/mutations'
 import { deepCopy } from 'client-src/tools/helper'
 import { stateInfo } from 'client-src/interface'
 
@@ -7,7 +7,8 @@ const { selectionEdit } = map;
 
 const filterMutationMap = {
   ...selectionEdit,
-  ...undo
+  ...undo,
+  ...app,
 };
 
 const pastStateStack: Array<stateInfo> = [];
