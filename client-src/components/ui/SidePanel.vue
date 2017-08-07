@@ -1,5 +1,5 @@
 <template>
-  <div class="side-panel" :class="{ 'show': showSidePanel }">
+  <div class="side-panel" :style="panelStyle" :class="{ 'show': app.showSidePanel }">
 
   </div>
 </template>
@@ -8,6 +8,7 @@
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
+  import { sidePanelWidth } from 'client-src/constants/defaultstyle'
   import { appInfo } from 'client-src/interface'
 
   @Component
@@ -16,10 +17,11 @@
     @State('app') app: appInfo;
 
     /** @Computed */
-    get showSidePanel(): boolean {
-      return this.app.showSidePanel;
+    get panelStyle() {
+      return {
+        width: `${sidePanelWidth}px`
+      }
     }
-
   }
 
   export default SidePanel;
@@ -27,7 +29,6 @@
 
 <style lang="scss" scoped>
   .side-panel {
-    width: 256px;
     position: fixed;
     top: 64px;
     right: 0;

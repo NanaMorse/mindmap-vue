@@ -28,9 +28,9 @@
   import Line from './Line.vue'
   import { generateUUID, extendedTopicInfoGlobalMap } from 'client-src/tools/helper'
   import { TopicType, KeyCodeMap } from 'client-src/constants/common'
-  import { canvasSize } from 'client-src/constants/defaultstyle'
+  import { canvasSize, sidePanelWidth } from 'client-src/constants/defaultstyle'
   import { map, undo } from 'client-src/constants/mutations'
-  import { mapInfo, extendedTopicInfo } from 'client-src/interface'
+  import { appInfo, mapInfo, extendedTopicInfo } from 'client-src/interface'
 
   const { selectionEdit, topicTreeEdit } = map;
   const { invokeUndo, invokeRedo } = undo;
@@ -53,6 +53,8 @@
     extendedTopicInfoList: Array<extendedTopicInfo>;
 
     @State('map') map: mapInfo;
+
+    @State('app') app: appInfo;
 
     @Mutation(selectionEdit.clearSelectionList) clearSelectionList;
 
@@ -151,6 +153,9 @@
       const { clientWidth, clientHeight } = document.body;
       const { boundingRect } = this.extendedTopicInfoList[0];
 
+      const viewPortWidth = this.app.showSidePanel ? clientWidth - sidePanelWidth : clientWidth;
+      const viewPortHeight = clientHeight;
+
       // 左边超出边界
       const leftBoundary = boundingRect.x2 - moveLimitDistance;
       if (deltaX > 0 && (left + deltaX > leftBoundary)) {
@@ -158,7 +163,7 @@
       }
 
       // 右边超出边界
-      const rightBoundary = boundingRect.x1 - clientWidth + moveLimitDistance;
+      const rightBoundary = boundingRect.x1 - viewPortWidth + moveLimitDistance;
       if (deltaX < 0 && (left + deltaX < rightBoundary)) {
         deltaX = rightBoundary - left;
       }
@@ -170,7 +175,7 @@
       }
 
       // 下边超出边界
-      const bottomBoundary = boundingRect.y1 - clientHeight + moveLimitDistance;
+      const bottomBoundary = boundingRect.y1 - viewPortHeight + moveLimitDistance;
       if (deltaY < 0 && (top + deltaY < bottomBoundary)) {
         deltaY = bottomBoundary - top;
       }

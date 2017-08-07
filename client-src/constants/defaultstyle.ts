@@ -112,4 +112,6 @@ export const EditReceiverHeight = 20;
 
 export const canvasSize = { width: 10000, height: 6000 };
 
+export const sidePanelWidth = 256;
+
 export const DefaultMapStructure = MapStructureType.LOGIC_TO_RIGHT;
