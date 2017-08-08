@@ -1,6 +1,15 @@
 <template>
   <div class="side-panel" :style="panelStyle" :class="{ 'show': app.showSidePanel }">
+    <div class="stage-panel">
+      <p class="panel-title">Stage Style</p>
+      <div class="panel-row">
+        <span>Background Color:</span>
+        <color-picker />
+      </div>
+    </div>
+    <div class="topic-panel hide">
 
+    </div>
   </div>
 </template>
 
@@ -8,10 +17,15 @@
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
+  import ColorPicker from './tools/ColorPicker.vue'
   import { sidePanelWidth } from 'client-src/constants/defaultstyle'
   import { appInfo } from 'client-src/interface'
 
-  @Component
+  @Component({
+    components: {
+      'color-picker': ColorPicker
+    }
+  })
   class SidePanel extends Vue {
 
     @State('app') app: appInfo;
@@ -46,5 +60,30 @@
       transform: translate3d(0, 0, 0);
       visibility: visible;
     }
+  }
+
+  .panel-title {
+    height: 56px;
+    background-color: #e8e8e8;
+    font-size: 20px;
+    line-height: 56px;
+    color: rgba(0,0,0,.54);
+    text-align: center;
+  }
+
+  .panel-row {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+
+    > span {
+      font-size: 16px;
+    }
+  }
+
+  .hide {
+    display: none;
   }
 </style>
