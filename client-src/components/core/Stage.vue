@@ -1,5 +1,5 @@
 <template>
-  <div class="stage"
+  <div class="stage" :style="stageStyle"
        @click="onStageClick">
     <div class="topics-container" :style="canvasStyle"
          @wheel.prevent.stop="onTopicContainerWheel">
@@ -28,9 +28,9 @@
   import Line from './Line.vue'
   import { generateUUID, extendedTopicInfoGlobalMap } from 'client-src/tools/helper'
   import { TopicType, KeyCodeMap } from 'client-src/constants/common'
-  import { canvasSize, sidePanelWidth } from 'client-src/constants/defaultstyle'
+  import { canvasSize, sidePanelWidth, stageBackgroundColor } from 'client-src/constants/defaultstyle'
   import { map, undo } from 'client-src/constants/mutations'
-  import { appInfo, mapInfo, extendedTopicInfo } from 'client-src/interface'
+  import { appInfo, mapInfo, stageInfo, extendedTopicInfo } from 'client-src/interface'
 
   const { selectionEdit, topicTreeEdit } = map;
   const { invokeUndo, invokeRedo } = undo;
@@ -55,6 +55,8 @@
     @State('map') map: mapInfo;
 
     @State('app') app: appInfo;
+
+    @State('stage') stage: stageInfo;
 
     @Mutation(selectionEdit.clearSelectionList) clearSelectionList;
 
@@ -90,6 +92,13 @@
       left: canvasSize.width / 2 - document.body.clientWidth / 2,
       top: canvasSize.height / 2 - (document.body.clientHeight - headerHeight) / 2
     };
+
+    /** @Computed */
+    get stageStyle() {
+      return {
+        backgroundColor: this.stage.backgroundColor || stageBackgroundColor
+      }
+    }
 
     /** @Computed */
     get canvasStyle() {

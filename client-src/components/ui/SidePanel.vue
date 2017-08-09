@@ -3,8 +3,9 @@
     <div class="stage-panel">
       <p class="panel-title">Stage Style</p>
       <div class="panel-row">
-        <span>Background Color:</span>
-        <color-picker />
+        <span>Background Color :</span>
+        <color-picker :color="stageBackgroundColor"
+                      :onColorChanged="setStageBackgroundColor"/>
       </div>
     </div>
     <div class="topic-panel hide">
@@ -17,9 +18,11 @@
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator'
   import { State, Mutation } from 'vuex-class'
+  import { stage } from 'client-src/constants/mutations'
   import ColorPicker from './tools/ColorPicker.vue'
-  import { sidePanelWidth } from 'client-src/constants/defaultstyle'
-  import { appInfo } from 'client-src/interface'
+  import { sidePanelWidth, stageBackgroundColor } from 'client-src/constants/defaultstyle'
+  import { appInfo, stageInfo } from 'client-src/interface'
+
 
   @Component({
     components: {
@@ -30,11 +33,25 @@
 
     @State('app') app: appInfo;
 
+    @State('stage') stage: stageInfo;
+
+    @Mutation(stage.setBackgroundColor) _setStageBackgroundColor;
+
     /** @Computed */
     get panelStyle() {
       return {
         width: `${sidePanelWidth}px`
       }
+    }
+
+    /** @Computed */
+    get stageBackgroundColor() {
+      return this.stage.backgroundColor || stageBackgroundColor
+    }
+
+    /** @Helper */
+    setStageBackgroundColor(color: string) {
+      this._setStageBackgroundColor({ color });
     }
   }
 

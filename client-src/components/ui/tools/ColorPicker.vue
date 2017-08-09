@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div class="color-picker" @click="onClick">
-      <div class="color-picker-swatch" />
-      <div class="popover-panel-wrapper" :class="{ 'hide': !showPopover }">
-        <sketch-color-picker v-model="currentColor" ref="popup" />
+    <div class="color-picker" tabindex="1"
+         @click="onClick"
+         @blur="onBlur">
+      <div class="color-picker-swatch" :style="{ backgroundColor: currentColor.hex }"/>
+      <div class="popover-panel-wrapper" :class="{ 'hide': !show }" >
+        <color-picker-panel v-model="currentColor"/>
       </div>
     </div>
   </div>
@@ -11,42 +13,39 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import { Component, Prop } from 'vue-property-decorator'
-  import { Sketch } from 'vue-color'
-  import PopupMixin from 'muse-ui/src/internal/popup'
-  import PopupManager from 'muse-ui/src/internal/popup/manager.js'
+  import { Component, Prop, Watch } from 'vue-property-decorator'
+  import { Sketch, Swatches } from 'vue-color'
 
   @Component({
     components: {
-      'sketch-color-picker': Sketch
-    },
-    mixins: [PopupMixin]
+      'color-picker-panel': Swatches
+    }
   })
-  class ColorPicker extends Vue implements PopupMixin {
+  class ColorPicker extends Vue {
 
     @Prop() color: string;
 
+    @Prop() onColorChanged: Function;
+
     /** @Data */
-    open: boolean;
+    show: boolean = false;
 
-    /** @Computed */
-    get showPopover() {
-      return this.open;
-    }
-
-    /** @Computed */
-    get currentColor() {
-      return this.color || '#000';
-    }
+    /** @Data */
+    currentColor: { hex: string } = { hex: this.color };
 
     /** @Listener */
     onClick() {
-      this.open = true;
+      this.show = true;
     }
 
-    /** @Helper */
-    overlayClick() {
-      console.log('dede')
+    /** @Listener */
+    onBlur() {
+      this.show = false;
+    }
+
+    @Watch('currentColor')
+    onColorSelected() {
+      this.onColorChanged(this.currentColor.hex);
     }
   }
 
@@ -58,6 +57,7 @@
 
   .color-picker {
     position: relative;
+    outline: none;
 
     .color-picker-swatch {
       width: $swatchSize;
@@ -75,14 +75,6 @@
 
       &.hide {
         display: none;
-      }
-
-      .cover {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
       }
     }
   }

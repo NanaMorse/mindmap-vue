@@ -2,6 +2,8 @@ import { TopicType, TopicShapeType, MapStructureType } from './common'
 import { topicStyle } from '../interface'
 const { RECT, ROUNDED_RECT, PARALLELOGRAM } = TopicShapeType;
 
+export const stageBackgroundColor = '#fff';
+
 interface defaultTopicStyleMap {
   [index: string]: topicStyle
 }

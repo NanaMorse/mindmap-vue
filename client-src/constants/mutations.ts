@@ -8,6 +8,10 @@ export const app = {
   toggleSidePanel: 'toggleSidePanel'
 };
 
+export const stage = {
+  setBackgroundColor: 'setBackgroundColor'
+};
+
 export const map = {
 
   selectionEdit: {
