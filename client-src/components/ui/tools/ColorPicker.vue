@@ -5,7 +5,7 @@
          @blur="onBlur">
       <div class="color-picker-swatch" :style="{ backgroundColor: currentColor.hex }"/>
       <div class="popover-panel-wrapper" :class="{ 'hide': !show }" >
-        <color-picker-panel v-model="currentColor"/>
+        <color-picker-panel :value="currentColor" @input="onColorSelected"/>
       </div>
     </div>
   </div>
@@ -30,8 +30,10 @@
     /** @Data */
     show: boolean = false;
 
-    /** @Data */
-    currentColor: { hex: string } = { hex: this.color };
+    /** @Computed */
+    get currentColor() {
+      return { hex: this.color };
+    }
 
     /** @Listener */
     onClick() {
@@ -43,9 +45,9 @@
       this.show = false;
     }
 
-    @Watch('currentColor')
-    onColorSelected() {
-      this.onColorChanged(this.currentColor.hex);
+    /** @Listener */
+    onColorSelected(newColor: { hex: string }) {
+      this.onColorChanged(newColor.hex);
     }
   }
 
