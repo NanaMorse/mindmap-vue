@@ -8,7 +8,7 @@
 <script lang="ts">
   import Vue from 'vue'
   import Header from './Header.vue'
-  import SidePanel from './SidePanel.vue'
+  import SidePanel from './SidePanel'
   import { Component } from 'vue-property-decorator'
 
   @Component({
